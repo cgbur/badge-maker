@@ -6,7 +6,7 @@ _Links are generated from cargo, view on docs page_
  A fast and accurate badge maker for services like [shields.io](https://shields.io/). Verified to
  match [badge-maker](https://www.npmjs.com/package/badge-maker) 1-to-1 with side by rendering tests*.
 
- ![example_flat](doc_svgs/example_flat.svg)
+ ![example_flat][flat]
 
  ![example_plastic](doc_svgs/example_plastic.svg)
 
@@ -18,6 +18,7 @@ _Links are generated from cargo, view on docs page_
 
  ![example_badge](doc_svgs/example_badge.svg)
 
+ [flat]: https://github.com/cgburgess/badge-maker/blob/master/doc_svgs/example_flat.svg
 
  *_This library differs in that it generates unique IDs for the svg so it can be directly
   embedded in websites (such as in this doc). So a diff between the outputs will not match. We
