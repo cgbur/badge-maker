@@ -8,19 +8,25 @@ _Links are generated from cargo, view on docs page_
 
  ![example_flat][flat]
 
- ![example_plastic](doc_svgs/example_plastic.svg)
+ ![example_plastic][plastic]
 
- ![example_flat_square](doc_svgs/example_flatsquare.svg)
+ ![example_flat_square][flatsquare]
 
- ![example_badge_maker](doc_svgs/example_badge_maker.svg)
+ ![example_badge_maker][badge_maker]
 
- ![example_color](doc_svgs/example_color.svg)
+ ![example_color][example_color]
 
- ![example_badge](doc_svgs/example_badge.svg)
+ ![example_badge][example_badge]
 
- [flat]: https://github.com/cgburgess/badge-maker/blob/master/doc_svgs/example_flat.svg
-
- *_This library differs in that it generates unique IDs for the svg so it can be directly
+ [flat]: https://raw.githubusercontent.com/cgburgess/badge-maker/master/doc_svgs/example_flat.svg
+ [plastic]: https://raw.githubusercontent.com/cgburgess/badge-maker/master/doc_svgs/example_plastic.svg
+ [flatsquare]: https://raw.githubusercontent.com/cgburgess/badge-maker/master/doc_svgs/example_flatsquare.svg
+ [badge_maker]: https://raw.githubusercontent.com/cgburgess/badge-maker/master/doc_svgs/example_badge_maker.svg
+ [example_color]: https://raw.githubusercontent.com/cgburgess/badge-maker/master/doc_svgs/example_color.svg
+ [example_badge]: https://raw.githubusercontent.com/cgburgess/badge-maker/master/doc_svgs/example_badge.svg
+ [example_cli]: https://raw.githubusercontent.com/cgburgess/badge-maker/master/doc_svgs/example_cli.svg
+ [link_logo]: https://raw.githubusercontent.com/cgburgess/badge-maker/master/doc_svgs/example_link_logo.svg
+*_This library differs in that it generates unique IDs for the svg so it can be directly
   embedded in websites (such as in this doc). So a diff between the outputs will not match. We
  only claim the visual outputs match which is whats important._
 
@@ -40,7 +46,7 @@ _Links are generated from cargo, view on docs page_
   4. Other badge styles (requires a custom renderer)
 
  ### Example
-![example_badge_maker](doc_svgs/example_badge_maker.svg)
+![example_badge_maker][badge_maker]
  ```rust
  use badge_maker::BadgeBuilder;
 
@@ -71,7 +77,7 @@ _Links are generated from cargo, view on docs page_
 
  This is a library but you can use it with a simple cli tool as well.
 
- ![cli](doc_svgs/example_cli.svg)
+ ![cli][example_cli]
 
  install
  ```bash
@@ -89,7 +95,7 @@ _Links are generated from cargo, view on docs page_
  and their [alias's](color::AliasColor), and [RGB](color::Color::Rgb) color inputs. These can be constructed
  with their enum variants or using the `...parse()` methods.
 
-![example_color](doc_svgs/example_color.svg)
+![example_color][example_color]
 
  ```rust
  use badge_maker::BadgeBuilder;
@@ -117,9 +123,9 @@ _Links are generated from cargo, view on docs page_
  **Supported**. Others coming soon. See [Style](Style) enum for choices when
  building or use the string literals.
 
-  - **Flat** ![example_flat](doc_svgs/example_flat.svg)
-  - **Plastic** ![example_plastic](doc_svgs/example_plastic.svg)
-  - **FlatSquare** ![example_flat_square](doc_svgs/example_flatsquare.svg)
+  - **Flat** ![example_flat][flat]
+  - **Plastic** ![example_plastic][plastic]
+  - **FlatSquare** ![example_flat_square][flatsquare]
   - ForTheBadge
   - Social
 
@@ -147,7 +153,7 @@ _Links are generated from cargo, view on docs page_
  wrap the svg in markdown `[![name for readers](link to api endpoint)](link when clicked)`.
 
 
-![example_link_logo](doc_svgs/example_link_logo.svg)
+![example_link_logo][link_logo]
  ```rust
  use badge_maker::BadgeBuilder;
 
