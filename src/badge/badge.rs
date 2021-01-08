@@ -90,6 +90,14 @@ impl Badge {
     }
   }
 
+  pub fn svg(&self) -> String {
+    match self.style {
+      Style::Flat => Flat::render(self),
+      Style::Plastic => Plastic::render(self),
+      Style::FlatSquare => FlatSquare::render(self),
+    }
+  }
+
   pub fn label(&self) -> &Option<String> {
     &self.label
   }
@@ -108,14 +116,6 @@ impl Badge {
 
   pub fn style(&self) -> Style {
     self.style
-  }
-
-  pub fn svg(&self) -> String {
-    match self.style {
-      Style::Flat => Flat::render(self),
-      Style::Plastic => Plastic::render(self),
-      Style::FlatSquare => FlatSquare::render(self),
-    }
   }
 
   pub fn links(&self) -> &Links {

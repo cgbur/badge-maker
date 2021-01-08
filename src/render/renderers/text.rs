@@ -100,7 +100,6 @@ mod tests {
       font: &Font::Verdana11Px,
     });
 
-    println!("{}", s.text);
     assert_eq!(
       s.text,
       r##"<text aria-hidden="true" x="545" y="152" fill="#ccc" fill-opacity=".3" transform="scale(.1)" textLength="590">content&lt;&gt;</text><text x="545" y="142" transform="scale(.1)" fill="#333" textLength="590">content&lt;&gt;</text>"##
