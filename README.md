@@ -1,6 +1,6 @@
  # Badge-Maker
 
-_Links are generated from cargo, view on docs page_
+_Links are generated from cargo, view on [docs](https://docs.rs/badge-maker/0.1.1/badge_maker/) page_
 
 
  A fast and accurate badge maker for services like [shields.io](https://shields.io/). Verified to
