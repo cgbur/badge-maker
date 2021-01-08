@@ -4,7 +4,8 @@ use constants::*;
 use seahash::hash;
 use std::collections::HashMap;
 use std::fs::File;
-use std::io::{Read, Write};
+use std::io::{Error, Read, Write};
+use std::process::Child;
 
 const USE_CACHE: bool = true;
 
@@ -79,7 +80,23 @@ fn load(badge_id: u64) -> (HashMap<String, String>, bool) {
 fn e2e() {
   let path = std::path::Path::new(std::env::current_dir().unwrap().as_path())
     .join("tests/node_badge_maker/");
-  std::env::set_current_dir(path).unwrap();
+
+  if !std::path::Path::exists("tests/node_badge_maker".as_ref()) {
+    std::env::set_current_dir("tests").unwrap();
+    match std::process::Command::new("unzip")
+      .arg("node_badge_maker.zip")
+      .spawn()
+    {
+      Ok(p) => p.wait_with_output().unwrap(),
+      Err(_) => {
+        eprintln!("unable to unzip. Do you have unzip?");
+        return;
+      }
+    };
+    std::env::set_current_dir("node_badge_maker").unwrap();
+  } else {
+    std::env::set_current_dir(path).unwrap();
+  }
 
   let badges = get_badges();
   let badge_bytes = bincode::serialize(&badges).unwrap();
