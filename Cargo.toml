@@ -26,7 +26,7 @@ clap = {version = "3.0.0-beta.2", optional = true}
 
 [[bench]]
 name = "bench"
-bench_path = "benches/bench.rs"
+path = "benches/bench.rs"
 harness = false
 
 [dev-dependencies]

@@ -1,5 +1,4 @@
-use badge_maker::error::Error;
-use badge_maker::{Badge, BadgeBuilder};
+use badge_maker::BadgeBuilder;
 use clap::{Clap, ErrorKind};
 
 #[derive(Clap, Debug)]
