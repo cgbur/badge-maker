@@ -8,6 +8,7 @@ repository = "https://github.com/cgburgess/badge-maker-rs"
 edition = "2018"
 license = "MIT"
 readme = "README.md"
+keywords = ["badge", "maker", "svg", "shield"]
 include = ["src/", "Cargo.toml", "fonts/verdana-11px-normal.bincode"]
 
 [features]
