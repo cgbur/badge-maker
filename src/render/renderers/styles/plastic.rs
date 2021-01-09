@@ -72,7 +72,7 @@ impl BadgeRenderer for Plastic {
         accessible_text: &config.accessible_text,
         links: &config.links,
       },
-      body,
+      &body,
     )
   }
 }
