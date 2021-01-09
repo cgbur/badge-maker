@@ -37,16 +37,25 @@ pub struct RenderBadgeConfig<'a> {
 //   strip_xml_whitespace(&badge)
 // }
 
+const NO_LINK_LEN: usize = 114;
+const HEIGHT_AND_WIDTH_LEN: usize = 10;
+const LINK_LEN: usize = 37;
+
 pub fn render_badge(config: RenderBadgeConfig, main: &str) -> String {
   let width = config.left_width + config.right_width;
   let link = config.links.single().unwrap_or("");
-  let link_len = if !link.is_empty() { 60 + link.len() } else { 0 };
+  let link_len = if !link.is_empty() {
+    LINK_LEN + link.len()
+  } else {
+    0
+  };
 
   let attributes = render_attributes(config.links, config.accessible_text);
   let title = render_title(config.links, config.accessible_text);
 
-  let mut buffer =
-    String::with_capacity(140 + link_len + main.len() + attributes.len() + title.len());
+  let mut buffer = String::with_capacity(
+    HEIGHT_AND_WIDTH_LEN + NO_LINK_LEN + link_len + main.len() + attributes.len() + title.len(),
+  );
 
   buffer.push_str(r##"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width=""##);
   itoa::fmt(&mut buffer, width).unwrap_or(());
