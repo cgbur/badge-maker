@@ -2,3 +2,4 @@
 Cargo.lock
 .idea/
 .DS_STORE
+tests/node_badge_maker/

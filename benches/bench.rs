@@ -2,11 +2,15 @@ use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 mod hex;
 mod render_attributes;
+mod render_text;
+use render_text::*;
+mod render_badge;
+use crate::render_badge::*;
 mod xml;
 use crate::hex::*;
 use crate::render_attributes::*;
 use crate::xml::*;
-use badge_maker::BadgeBuilder;
+use badge_maker::{BadgeBuilder, Links};
 
 pub fn bench_escape_xml(c: &mut Criterion) {
   let mut group = c.benchmark_group("escape_xml");
@@ -79,5 +83,52 @@ pub fn bench_hex(c: &mut Criterion) {
   group.finish();
 }
 
-criterion_group!(benches, bench_render_attributes);
+pub fn bench_render_text(c: &mut Criterion) {
+  let mut group = c.benchmark_group("render_text");
+
+  let param = RenderTextConfig {
+    left_margin: 10,
+    horizontal_padding: 20,
+    content: "Hello There",
+    height: 20,
+    vertical_margin: 5,
+    shadow: true,
+    color: "#c33",
+  };
+
+  group.bench_function("render_text_old", |b| {
+    b.iter(move || render_text_old(black_box(param.clone())))
+  });
+
+  group.bench_function("render_text_new", |b| {
+    b.iter(move || render_text_new(black_box(param)))
+  });
+
+  group.finish();
+}
+
+pub fn bench_render_badge(c: &mut Criterion) {
+  let mut group = c.benchmark_group("render_badge");
+
+  let badge = BadgeBuilder::new().message("hello").build().unwrap();
+
+  let param = RenderBadgeConfig {
+    left_width: 200,
+    right_width: 300,
+    height: 10,
+    accessible_text: "access",
+    links: badge.links(),
+  };
+
+  group.bench_function("render_badge_old", |b| {
+    b.iter(move || render_badge_old(black_box(param.clone()), black_box("main")))
+  });
+
+  group.bench_function("render_badge_new", |b| {
+    b.iter(move || render_badge_new(black_box(param), black_box("main")))
+  });
+
+  group.finish();
+}
+criterion_group!(benches, bench_render_badge);
 criterion_main!(benches);
