@@ -1,4 +1,4 @@
-pub fn round_up_to_odd(val: u32) -> u32 {
+pub fn round_up_to_odd(val: usize) -> usize {
   if val % 2 == 0 {
     val + 1
   } else {
