@@ -2,7 +2,7 @@ use itertools::Itertools;
 use serde::{Deserialize, Serialize};
 
 pub const COLORS: [&str; 3] = ["brightgreen", "#c33", "#ff40b0"];
-pub const LABELS: [&str; 1] = [r##"<>;&Hello!!&"'"##];
+pub const LABELS: [&str; 1] = [r##"<>;&Hello!!&"'"##]; // "💀💀emoji💀💀test💀💀" todo investigate
 pub const STYLES: [&str; 3] = ["flat", "plastic", "flatsquare"];
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -16,13 +16,15 @@ pub struct NewBadge {
 pub fn get_badges() -> Vec<NewBadge> {
   COLORS
     .iter()
+    .cartesian_product(COLORS.iter())
+    .cartesian_product(LABELS.iter())
     .cartesian_product(LABELS.iter())
     .cartesian_product(STYLES.iter())
-    .map(|((color, message), style)| NewBadge {
-      label: message.to_string(),
+    .map(|((((c1, c2), label), message), style)| NewBadge {
+      label: label.to_string(),
       message: message.to_string(),
-      color: color.to_string(),
-      label_color: color.to_string(),
+      color: c1.to_string(),
+      label_color: c2.to_string(),
       style: style.to_string(),
     })
     .collect_vec()

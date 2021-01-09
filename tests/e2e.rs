@@ -4,8 +4,7 @@ use constants::*;
 use seahash::hash;
 use std::collections::HashMap;
 use std::fs::File;
-use std::io::{Error, Read, Write};
-use std::process::Child;
+use std::io::{Read, Write};
 
 const USE_CACHE: bool = true;
 
