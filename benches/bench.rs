@@ -4,8 +4,10 @@ mod hex;
 mod render_attributes;
 mod render_text;
 use render_text::*;
+mod create_accessible;
 mod render_badge;
 mod render_title;
+use crate::create_accessible::*;
 use crate::render_badge::*;
 use render_title::*;
 mod xml;
@@ -149,5 +151,19 @@ pub fn bench_render_title(c: &mut Criterion) {
   group.finish();
 }
 
-criterion_group!(benches, bench_strip_xml_whitespace);
+pub fn bench_crete_accessible(c: &mut Criterion) {
+  let mut group = c.benchmark_group("create_accessible");
+
+  group.bench_function("create_accessible_text_old", |b| {
+    b.iter(|| create_accessible_text_old(black_box(&Some("hello".to_string())), black_box("there")))
+  });
+
+  group.bench_function("create_accessible_text_new", |b| {
+    b.iter(|| create_accessible_text_new(black_box(&Some("hello".to_string())), black_box("there")))
+  });
+
+  group.finish();
+}
+
+criterion_group!(benches, bench_crete_accessible);
 criterion_main!(benches);
