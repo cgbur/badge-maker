@@ -5,7 +5,9 @@ mod render_attributes;
 mod render_text;
 use render_text::*;
 mod render_badge;
+mod render_title;
 use crate::render_badge::*;
+use render_title::*;
 mod xml;
 use crate::hex::*;
 use crate::render_attributes::*;
@@ -130,5 +132,22 @@ pub fn bench_render_badge(c: &mut Criterion) {
 
   group.finish();
 }
-criterion_group!(benches, bench_render_badge);
+
+pub fn bench_render_title(c: &mut Criterion) {
+  let mut group = c.benchmark_group("render_title");
+
+  let badge = BadgeBuilder::new().message("hello").build().unwrap();
+
+  group.bench_function("render_title_old", |b| {
+    b.iter(|| render_title(black_box(&badge.links().clone()), black_box("main")))
+  });
+
+  group.bench_function("render_title_new", |b| {
+    b.iter(|| render_title_new(black_box(&badge.links().clone()), black_box("main")))
+  });
+
+  group.finish();
+}
+
+criterion_group!(benches, bench_strip_xml_whitespace);
 criterion_main!(benches);

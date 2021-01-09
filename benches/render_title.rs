@@ -15,26 +15,23 @@ pub fn escape_xml(s: &str) -> String {
   AC.replace_all(s, &XML_ESCAPE_REPLACEMENTS)
 }
 
-pub fn render_attributes_string(links: &Links, accessible_text: &str) -> String {
-  if !links.any() {
-    let escaped = escape_xml(accessible_text);
-    let mut build = String::with_capacity(30 + escaped.len());
-    build.push_str(r##"role="img" aria-label=""##);
-    build.push_str(&escaped);
-    build.push('"');
-    build
-  } else {
-    "".to_string()
-  }
-}
-
-pub fn render_attributes_format(links: &Links, accessible_text: &str) -> String {
+pub fn render_title(links: &Links, accessible_text: &str) -> String {
   if links.any() {
     "".to_string()
   } else {
-    format!(
-      r##"role="img" aria-label="{}""##,
-      escape_xml(accessible_text)
-    )
+    format!("<title>{}</title>", escape_xml(accessible_text))
+  }
+}
+
+pub fn render_title_new(links: &Links, accessible_text: &str) -> String {
+  if links.any() {
+    "".to_string()
+  } else {
+    let accessible_text = escape_xml(accessible_text);
+    let mut buffer = String::with_capacity(15 + accessible_text.len());
+    buffer.push_str(r#"<title>"#);
+    buffer.push_str(&accessible_text);
+    buffer.push_str(r#"</title>"#);
+    buffer
   }
 }
