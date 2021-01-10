@@ -13,6 +13,9 @@ pub struct RenderLogoReturn {
   pub logo_width: usize,
 }
 
+const RAW_STR_LEN: usize = 47;
+const NUM_STR_LEN: usize = 14;
+
 pub fn render_logo(config: RenderLogoConfig) -> RenderLogoReturn {
   if config.logo.is_none() {
     return RenderLogoReturn {
@@ -26,18 +29,28 @@ pub fn render_logo(config: RenderLogoConfig) -> RenderLogoReturn {
   let logo_height = 14;
   let y = (config.badge_height - logo_height) / 2;
   let x = config.horizontal_padding;
+  let escaped_logo = escape_xml(logo.url());
 
-  let rendered_logo = format!(
-    r#"<image x="{x}" y="{y}" width="{logo_width}" height="{logo_height}" xlink:href="{escaped_logo}"/>"#,
-    x = x,
-    y = y,
-    logo_width = logo.width(),
-    logo_height = logo_height,
-    escaped_logo = escape_xml(logo.url())
-  );
+  let mut buffer = String::with_capacity(RAW_STR_LEN + NUM_STR_LEN + escaped_logo.len());
+
+  #[cfg(debug_assertions)] let start_cap = buffer.capacity();
+
+  buffer.push_str(r#"<image x=""#);
+  itoa::fmt(&mut buffer, x).unwrap();
+  buffer.push_str(r#"" y=""#);
+  itoa::fmt(&mut buffer, y).unwrap();
+  buffer.push_str(r#"" width=""#);
+  itoa::fmt(&mut buffer, logo.width()).unwrap();
+  buffer.push_str(r#"" height=""#);
+  itoa::fmt(&mut buffer, logo_height).unwrap();
+  buffer.push_str(r#"" xlink:href=""#);
+  buffer.push_str(&escaped_logo);
+  buffer.push_str(r#""/>"#);
+
+  #[cfg(debug_assertions)] assert_eq!(start_cap, buffer.capacity());
 
   RenderLogoReturn {
-    rendered_logo,
+    rendered_logo: buffer,
     logo_width: (logo.width() as isize + logo.padding()) as usize,
   }
 }

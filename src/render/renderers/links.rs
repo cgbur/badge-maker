@@ -6,8 +6,11 @@ pub struct RenderLinkConfig<'a> {
   pub text_length: usize,
   pub horizontal_padding: usize,
   pub left_margin: isize,
-  pub rendered_text: String,
+  pub rendered_text: &'a str,
 }
+
+const RAW_STR_LEN: usize = 89;
+const NUM_STR_LEN: usize = 14;
 
 pub fn render_link(config: RenderLinkConfig) -> String {
   let rect_height = config.height;
@@ -18,17 +21,26 @@ pub fn render_link(config: RenderLinkConfig) -> String {
     0
   };
 
-  format!(
-    r#"<a target="_blank" xlink:href="{escaped_link}">
-      <rect width="{rect_width}" x="{rect_x}" height="{rect_height}" fill="rgba(0,0,0,0)" />
-      {rendered_text}
-    </a>"#,
-    escaped_link = escape_xml(config.link),
-    rect_width = rect_width,
-    rect_x = rect_x,
-    rect_height = rect_height,
-    rendered_text = config.rendered_text
-  )
+  let escaped_link = escape_xml(config.link);
+
+  let mut buffer = String::with_capacity(RAW_STR_LEN + NUM_STR_LEN + config.rendered_text.len() + escaped_link.len());
+  #[cfg(debug_assertions)] let start_cap = buffer.capacity();
+
+  buffer.push_str(r#"<a target="_blank" xlink:href=""#);
+  buffer.push_str(&escaped_link);
+  buffer.push_str(r#""><rect width=""#);
+  itoa::fmt(&mut buffer, rect_width).unwrap();
+  buffer.push_str(r#"" x=""#);
+  itoa::fmt(&mut buffer, rect_x).unwrap();
+  buffer.push_str(r#"" height=""#);
+  itoa::fmt(&mut buffer, rect_height).unwrap();
+  buffer.push_str(r#"" fill="rgba(0,0,0,0)"/>"#);
+  buffer.push_str(&config.rendered_text);
+  buffer.push_str(r#"</a>"#);
+
+  #[cfg(debug_assertions)] assert_eq!(start_cap, buffer.capacity());
+  
+  buffer
 }
 
 #[cfg(test)]
@@ -44,9 +56,9 @@ mod tests {
         text_length: 123,
         horizontal_padding: 13,
         left_margin: 15,
-        rendered_text: "rendered_text".to_string()
+        rendered_text: "rendered_text",
       }),
-      "<a target=\"_blank\" xlink:href=\"some&gt;link\">\n      <rect width=\"149\" x=\"16\" height=\"212\" fill=\"rgba(0,0,0,0)\" />\n      rendered_text\n    </a>"
+      "<a target=\"_blank\" xlink:href=\"some&gt;link\"><rect width=\"149\" x=\"16\" height=\"212\" fill=\"rgba(0,0,0,0)\"/>rendered_text</a>"
     );
   }
 }
