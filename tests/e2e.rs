@@ -82,6 +82,7 @@ fn e2e() {
 
   if !std::path::Path::exists("tests/node_badge_maker".as_ref()) {
     std::env::set_current_dir("tests").unwrap();
+    #[cfg(not(windows))]
     match std::process::Command::new("unzip")
       .arg("node_badge_maker.zip")
       .spawn()
@@ -89,6 +90,18 @@ fn e2e() {
       Ok(p) => p.wait_with_output().unwrap(),
       Err(_) => {
         eprintln!("unable to unzip. Do you have unzip?");
+        return;
+      }
+    };
+    #[cfg(windows)]
+    match std::process::Command::new("tar")
+        .arg("-xf")
+        .arg("node_badge_maker.zip")
+        .spawn()
+    {
+      Ok(p) => p.wait_with_output().unwrap(),
+      Err(_) => {
+        eprintln!("unable to unzip. Do you have tar in windows?");
         return;
       }
     };
