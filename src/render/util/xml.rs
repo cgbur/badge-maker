@@ -4,7 +4,8 @@ use lazy_static::lazy_static;
 const XML_ESCAPE_PATTERNS: [&str; 5] = ["&", "<", ">", "\"", "'"];
 const XML_ESCAPE_REPLACEMENTS: [&str; 5] = ["&amp;", "&lt;", "&gt;", "&quot;", "&apos;"];
 
-const XML_STRIP_TRAILING_PATTERNS_LEN: usize = 10;
+const XML_STRIP_TRAILING_PATTERNS_LEN: usize = 8;
+
 lazy_static! {
   static ref XML_STRIP_TRAILING_PATTERNS: (Vec<String>, Vec<String>) = {
     let a = aho_corasick_pattern_builder(XML_STRIP_TRAILING_PATTERNS_LEN, ">", " ");

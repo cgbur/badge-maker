@@ -57,10 +57,12 @@ pub fn render_badge(config: RenderBadgeConfig, main: &str) -> String {
     HEIGHT_AND_WIDTH_LEN + NO_LINK_LEN + link_len + main.len() + attributes.len() + title.len(),
   );
 
+  #[cfg(debug_assertions)] let start_cap = buffer.capacity();
+
   buffer.push_str(r##"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width=""##);
-  itoa::fmt(&mut buffer, width).unwrap_or(());
+  itoa::fmt(&mut buffer, width).unwrap();
   buffer.push_str(r#"" height=""#);
-  itoa::fmt(&mut buffer, config.height).unwrap_or(());
+  itoa::fmt(&mut buffer, config.height).unwrap();
   buffer.push_str(r#"" "#);
 
   buffer.push_str(&attributes);
@@ -78,6 +80,8 @@ pub fn render_badge(config: RenderBadgeConfig, main: &str) -> String {
   };
 
   buffer.push_str(r#"</svg>"#);
+
+  #[cfg(debug_assertions)] assert_eq!(start_cap, buffer.capacity());
 
   strip_xml_whitespace(&buffer)
 }
