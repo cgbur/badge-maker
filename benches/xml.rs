@@ -44,7 +44,7 @@ lazy_static! {
   static ref TRAILING_SPACE_BYTES: regex::bytes::Regex = regex::bytes::Regex::new(r">\s+").unwrap();
 }
 
-const XML_STRIP_TRAILING_PATTERNS_LEN: usize = 10;
+const XML_STRIP_TRAILING_PATTERNS_LEN: usize = 8;
 lazy_static! {
   static ref XML_STRIP_TRAILING_PATTERNS: (Vec<String>, Vec<String>) = {
     let a = aho_corasick_pattern_builder(XML_STRIP_TRAILING_PATTERNS_LEN, ">", " ");
@@ -95,6 +95,18 @@ pub fn strip_xml_trailing_aho(s: &str) -> String {
       .auto_configure(&XML_STRIP_TRAILING_PATTERNS.0)
       .match_kind(MatchKind::LeftmostFirst)
       .build(&XML_STRIP_TRAILING_PATTERNS.0);
+  };
+
+  AC.replace_all(&s, &XML_STRIP_TRAILING_PATTERNS.1)
+}
+
+pub fn strip_xml_trailing_aho_sized(s: &str) -> String {
+  lazy_static! {
+    static ref AC: AhoCorasick<u16> = AhoCorasickBuilder::new()
+      .auto_configure(&XML_STRIP_TRAILING_PATTERNS.0)
+      .match_kind(MatchKind::LeftmostFirst)
+      .build_with_size(&XML_STRIP_TRAILING_PATTERNS.0)
+      .unwrap();
   };
 
   AC.replace_all(&s, &XML_STRIP_TRAILING_PATTERNS.1)
@@ -155,3 +167,15 @@ pub fn escape_xml_optimized_sized(s: &str) -> String {
 
   AC.replace_all(s, &XML_ESCAPE_REPLACEMENTS)
 }
+
+pub fn escape_xml_auto_optimized_sized(s: &str) -> String {
+  lazy_static! {
+    static ref AC: AhoCorasick<u16> = AhoCorasickBuilder::new()
+      .auto_configure(&XML_ESCAPE_REPLACEMENTS)
+      .build_with_size(&XML_ESCAPE_PATTERNS)
+      .unwrap();
+  };
+
+  AC.replace_all(s, &XML_ESCAPE_REPLACEMENTS)
+}
+

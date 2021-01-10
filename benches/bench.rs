@@ -19,18 +19,18 @@ use badge_maker::{BadgeBuilder, Links};
 pub fn bench_escape_xml(c: &mut Criterion) {
   let mut group = c.benchmark_group("escape_xml");
 
-  group.bench_function("escape_xml_aho_corasick_optimized", |b| {
+  group.bench_function("escape_xml_optimized", |b| {
     b.iter(|| escape_xml_optimized(black_box(TEXT_TO_ESCAPE)))
   });
-  // group.bench_function("escape_xml_aho_corasick_optimized_sized", |b| {
-  //   b.iter(|| escape_xml_optimized_sized(black_box(TEXT_TO_ESCAPE)))
-  // });
+  group.bench_function("escape_xml_optimized_sized", |b| {
+    b.iter(|| escape_xml_optimized_sized(black_box(TEXT_TO_ESCAPE)))
+  });
   group.bench_function("escape_xml_auto_optimized", |b| {
     b.iter(|| escape_xml_auto_optimized(black_box(TEXT_TO_ESCAPE)))
   });
-  // group.bench_function("escape_xml_replace", |b| {
-  //   b.iter(|| escape_xml_old(black_box(TEXT_TO_ESCAPE)))
-  // });
+  group.bench_function("escape_xml_auto_optimized_sized", |b| {
+    b.iter(|| escape_xml_auto_optimized_sized(black_box(TEXT_TO_ESCAPE)))
+  });
   // group.bench_function("escape_xml_aho_corasick", |b| {
   //   b.iter(|| escape_xml_static(black_box(TEXT_TO_ESCAPE)))
   // });
@@ -45,13 +45,17 @@ pub fn bench_strip_xml_whitespace(c: &mut Criterion) {
     b.iter(|| strip_xml_trailing_aho(black_box(SVG_TO_STRIP)))
   });
 
-  group.bench_function("strip_xml_trailing_str_find_iter", |b| {
-    b.iter(|| strip_xml_trailing_str_find_iter(black_box(SVG_TO_STRIP)))
-  });
+  // group.bench_function("strip_xml_trailing_aho_sized", |b| {
+  //   b.iter(|| strip_xml_trailing_aho_sized(black_box(SVG_TO_STRIP)))
+  // });
 
-  group.bench_function("strip_xml_trailing_replace_all", |b| {
-    b.iter(|| strip_xml_trailing_replace_all(black_box(SVG_TO_STRIP)))
-  });
+  // group.bench_function("strip_xml_trailing_str_find_iter", |b| {
+  //   b.iter(|| strip_xml_trailing_str_find_iter(black_box(SVG_TO_STRIP)))
+  // });
+  //
+  // group.bench_function("strip_xml_trailing_replace_all", |b| {
+  //   b.iter(|| strip_xml_trailing_replace_all(black_box(SVG_TO_STRIP)))
+  // });
 
   group.finish();
 }
@@ -84,6 +88,9 @@ pub fn bench_hex(c: &mut Criterion) {
     b.iter(|| hex_to_rgb_or(black_box("c33c33")))
   });
 
+  group.bench_function("hex_to_rgb_repeat", |b| {
+    b.iter(|| hex_to_rgb_repeat(black_box("c33c33")))
+  });
   group.finish();
 }
 
@@ -165,5 +172,5 @@ pub fn bench_crete_accessible(c: &mut Criterion) {
   group.finish();
 }
 
-criterion_group!(benches, bench_crete_accessible);
+criterion_group!(benches, bench_strip_xml_whitespace);
 criterion_main!(benches);
