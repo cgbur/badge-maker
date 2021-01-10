@@ -6,11 +6,17 @@ const RAW_STRING_LEN: usize = 30;
 pub fn render_attributes(links: &Links, accessible_text: &str) -> String {
   if !links.any() {
     let escaped = escape_xml(accessible_text);
-    let mut build = String::with_capacity(RAW_STRING_LEN + escaped.len());
-    build.push_str(r##"role="img" aria-label=""##);
-    build.push_str(&escaped);
-    build.push('"');
-    build
+    let mut buffer = String::with_capacity(RAW_STRING_LEN + escaped.len());
+
+    #[cfg(debug_assertions)] let start_cap = buffer.capacity();
+
+    buffer.push_str(r##"role="img" aria-label=""##);
+    buffer.push_str(&escaped);
+    buffer.push('"');
+
+    #[cfg(debug_assertions)] assert_eq!(start_cap, buffer.capacity());
+
+    buffer
   } else {
     "".to_string()
   }
