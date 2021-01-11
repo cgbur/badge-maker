@@ -178,4 +178,3 @@ pub fn escape_xml_auto_optimized_sized(s: &str) -> String {
 
   AC.replace_all(s, &XML_ESCAPE_REPLACEMENTS)
 }
-

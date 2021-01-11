@@ -70,6 +70,10 @@ pub fn bench_render_attributes(c: &mut Criterion) {
     b.iter(|| render_attributes_format(black_box(links), black_box("accessible accessible")))
   });
 
+  group.bench_function("render_attributes_new_fomat", |b| {
+    b.iter(|| render_attributes_new_fomat(black_box(links), black_box("accessible accessible")))
+  });
+
   group.bench_function("render_attributes_string", |b| {
     b.iter(|| render_attributes_string(black_box(links), black_box("accessible accessible")))
   });
@@ -135,6 +139,10 @@ pub fn bench_render_badge(c: &mut Criterion) {
     b.iter(move || render_badge_old(black_box(param.clone()), black_box("main")))
   });
 
+  group.bench_function("render_badge_format_macros_crate", |b| {
+    b.iter(move || render_badge_format_macros_crate(black_box(param.clone()), black_box("main")))
+  });
+
   group.bench_function("render_badge_new", |b| {
     b.iter(move || render_badge_new(black_box(param), black_box("main")))
   });
@@ -172,5 +180,5 @@ pub fn bench_crete_accessible(c: &mut Criterion) {
   group.finish();
 }
 
-criterion_group!(benches, bench_strip_xml_whitespace);
+criterion_group!(benches, bench_render_attributes);
 criterion_main!(benches);
