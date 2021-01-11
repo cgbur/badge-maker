@@ -116,7 +116,12 @@ fn e2e() {
 
   let (mut results, did_load) = load(file_name);
 
-  for badge in badges {
+  println!(
+    "\t\tchecking {} badges for deviations from Node badge-maker...",
+    badges.len()
+  );
+
+  for badge in &badges {
     let rust = BadgeBuilder::new()
       .label(&badge.label)
       .message(&badge.message)
@@ -135,6 +140,8 @@ fn e2e() {
 
     assert_eq!(node.to_string(), rust);
   }
+
+  println!("\t\tall badges matched");
 
   if !did_load && USE_CACHE {
     let mut file = File::create(format!("./cache/{}", file_name)).unwrap();
