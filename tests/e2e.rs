@@ -111,6 +111,7 @@ fn e2e() {
   }
 
   let badges = get_badges();
+  // let badges = badges[0..20].to_vec();
   let badge_bytes = bincode::serialize(&badges).unwrap();
   let file_name = hash(&badge_bytes);
 
@@ -130,6 +131,7 @@ fn e2e() {
       .style_parse(&badge.style)
       .build()
       .unwrap();
+
     let test_id = rust.id().to_string();
 
     let node = results

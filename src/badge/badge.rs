@@ -15,13 +15,38 @@ fn gen_id(
   label_color: &str,
   color: &str,
   style: &Style,
+  links: &Links,
+  logo: &Option<Logo>,
 ) -> String {
+  let Logo {
+    url,
+    width,
+    padding,
+  } = logo.as_ref().cloned().unwrap_or(Logo {
+    url: "not_set".to_string(),
+    width: 0,
+    padding: 0,
+  });
+
   let buf = vec![
     label.as_ref().unwrap_or(&"not_set".to_string()).as_bytes(),
     message.as_bytes(),
     label_color.as_bytes(),
     color.as_bytes(),
     style.to_string().as_bytes(),
+    links
+      .left
+      .as_ref()
+      .unwrap_or(&"not_set".to_string())
+      .as_bytes(),
+    links
+      .right
+      .as_ref()
+      .unwrap_or(&"not_set".to_string())
+      .as_bytes(),
+    url.as_bytes(),
+    &width.to_be_bytes(),
+    &padding.to_be_bytes(),
   ]
   .iter()
   .cloned()
@@ -72,7 +97,15 @@ impl Badge {
     links: Links,
     logo: Option<Logo>,
   ) -> Self {
-    let id = gen_id(&label, &message, &label_color, &color, &style);
+    let id = gen_id(
+      &label,
+      &message,
+      &label_color,
+      &color,
+      &style,
+      &links,
+      &logo,
+    );
     let ids = format!("bms-{}", id);
     let idr = format!("bmr-{}", id);
 
@@ -146,8 +179,19 @@ mod tests {
   #[test]
   fn gen_id_test() {
     assert_eq!(
-      gen_id(&Some("hello".to_string()), "e", "e", "3", &Flat),
-      "bf81a730957fd01d"
+      gen_id(
+        &Some("hello".to_string()),
+        "e",
+        "e",
+        "3",
+        &Flat,
+        &Links {
+          left: Option::from("hello".to_string()),
+          right: None
+        },
+        &None
+      ),
+      "e3f9ab42ba6abd5a"
     );
     assert_eq!(
       gen_id(
@@ -155,9 +199,14 @@ mod tests {
         "message",
         "label_color",
         "#ec3d",
-        &Flat
+        &Flat,
+        &Links {
+          left: None,
+          right: None
+        },
+        &None
       ),
-      "58129eed803f3f02"
+      "a387ad147f28ca08"
     );
   }
 }
