@@ -39,7 +39,14 @@ impl Font {
     }
     match dict.binary_search_by_key(&c, |datum| datum.low) {
       Ok(idx) => dict[idx].width,
-      Err(idx) => dict[idx - 1].width,
+      Err(idx) => {
+        let datum = &dict[idx - 1];
+        if datum.contains(c) {
+          datum.width
+        } else {
+          Font::width_of_char_code('m' as u32, dict)
+        }
+      }
     }
   }
 
