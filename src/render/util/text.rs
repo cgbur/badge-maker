@@ -29,11 +29,13 @@ pub fn preferred_width(text: &str, font: &Font) -> usize {
 pub fn create_accessible_text(label: &Option<String>, message: &str) -> String {
   if let Some(label) = label {
     let mut buffer = String::with_capacity(label.len() + message.len() + 2);
-    #[cfg(debug_assertions)] let start_cap = buffer.capacity();
+    #[cfg(debug_assertions)]
+    let start_cap = buffer.capacity();
     buffer.push_str(label);
     buffer.push_str(": ");
     buffer.push_str(message);
-    #[cfg(debug_assertions)] assert_eq!(start_cap, buffer.capacity());
+    #[cfg(debug_assertions)]
+    assert_eq!(start_cap, buffer.capacity());
     buffer
   } else {
     message.to_string()

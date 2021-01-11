@@ -110,7 +110,8 @@ pub fn render_text(config: RenderTextConfig) -> RenderTextReturn {
 
   let mut buffer = String::with_capacity(buffer_capacity);
 
-  #[cfg(debug_assertions)] let start_cap = buffer.capacity();
+  #[cfg(debug_assertions)]
+  let start_cap = buffer.capacity();
 
   if config.shadow {
     buffer.push_str(r#"<text aria-hidden="true" x=""#);
@@ -138,7 +139,8 @@ pub fn render_text(config: RenderTextConfig) -> RenderTextReturn {
   buffer.push_str(&escaped_content);
   buffer.push_str(r#"</text>"#);
 
-  #[cfg(debug_assertions)] assert_eq!(start_cap, buffer.capacity());
+  #[cfg(debug_assertions)]
+  assert_eq!(start_cap, buffer.capacity());
 
   let rendered_text = if let Some(link) = config.link.as_ref() {
     render_link(RenderLinkConfig {

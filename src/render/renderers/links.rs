@@ -23,8 +23,11 @@ pub fn render_link(config: RenderLinkConfig) -> String {
 
   let escaped_link = escape_xml(config.link);
 
-  let mut buffer = String::with_capacity(RAW_STR_LEN + NUM_STR_LEN + config.rendered_text.len() + escaped_link.len());
-  #[cfg(debug_assertions)] let start_cap = buffer.capacity();
+  let mut buffer = String::with_capacity(
+    RAW_STR_LEN + NUM_STR_LEN + config.rendered_text.len() + escaped_link.len(),
+  );
+  #[cfg(debug_assertions)]
+  let start_cap = buffer.capacity();
 
   buffer.push_str(r#"<a target="_blank" xlink:href=""#);
   buffer.push_str(&escaped_link);
@@ -38,8 +41,9 @@ pub fn render_link(config: RenderLinkConfig) -> String {
   buffer.push_str(&config.rendered_text);
   buffer.push_str(r#"</a>"#);
 
-  #[cfg(debug_assertions)] assert_eq!(start_cap, buffer.capacity());
-  
+  #[cfg(debug_assertions)]
+  assert_eq!(start_cap, buffer.capacity());
+
   buffer
 }
 

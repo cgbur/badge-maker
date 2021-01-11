@@ -1,6 +1,9 @@
 use crate::badge::Logo;
 use crate::render::util::xml::escape_xml;
 
+const RAW_STR_LEN: usize = 47;
+const NUM_STR_LEN: usize = 14;
+
 pub struct RenderLogoConfig<'a> {
   pub logo: &'a Option<Logo>,
   pub badge_height: usize,
@@ -12,9 +15,6 @@ pub struct RenderLogoReturn {
   pub rendered_logo: String,
   pub logo_width: usize,
 }
-
-const RAW_STR_LEN: usize = 47;
-const NUM_STR_LEN: usize = 14;
 
 pub fn render_logo(config: RenderLogoConfig) -> RenderLogoReturn {
   if config.logo.is_none() {
@@ -33,7 +33,8 @@ pub fn render_logo(config: RenderLogoConfig) -> RenderLogoReturn {
 
   let mut buffer = String::with_capacity(RAW_STR_LEN + NUM_STR_LEN + escaped_logo.len());
 
-  #[cfg(debug_assertions)] let start_cap = buffer.capacity();
+  #[cfg(debug_assertions)]
+  let start_cap = buffer.capacity();
 
   buffer.push_str(r#"<image x=""#);
   itoa::fmt(&mut buffer, x).unwrap();
@@ -47,7 +48,8 @@ pub fn render_logo(config: RenderLogoConfig) -> RenderLogoReturn {
   buffer.push_str(&escaped_logo);
   buffer.push_str(r#""/>"#);
 
-  #[cfg(debug_assertions)] assert_eq!(start_cap, buffer.capacity());
+  #[cfg(debug_assertions)]
+  assert_eq!(start_cap, buffer.capacity());
 
   RenderLogoReturn {
     rendered_logo: buffer,

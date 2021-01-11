@@ -95,9 +95,9 @@ fn e2e() {
     };
     #[cfg(windows)]
     match std::process::Command::new("tar")
-        .arg("-xf")
-        .arg("node_badge_maker.zip")
-        .spawn()
+      .arg("-xf")
+      .arg("node_badge_maker.zip")
+      .spawn()
     {
       Ok(p) => p.wait_with_output().unwrap(),
       Err(_) => {
