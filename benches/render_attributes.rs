@@ -27,15 +27,6 @@ pub fn render_attributes_string(links: &Links, accessible_text: &str) -> String 
     "".to_string()
   }
 }
-use fomat_macros::fomat;
-
-pub fn render_attributes_new_fomat(links: &Links, accessible_text: &str) -> String {
-  if !links.any() {
-    fomat!(r#"role="img" aria-label=""# (escape_xml(accessible_text)) r#"""#)
-  } else {
-    "".to_string()
-  }
-}
 
 pub fn render_attributes_format(links: &Links, accessible_text: &str) -> String {
   if links.any() {

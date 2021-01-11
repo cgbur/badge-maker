@@ -50,18 +50,18 @@ pub fn render_badge_old(config: RenderBadgeConfig, main: &str) -> String {
   badge
 }
 
-use fomat_macros::fomat;
+// use fomat_macros::fomat;
 
-pub fn render_badge_format_macros_crate(config: RenderBadgeConfig, main: &str) -> String {
-  let width = config.left_width + config.right_width;
-
-  let badge = fomat!(r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width=""# (width) r#"" height=""#
-  (config.height) r#"" attributes>"# "title" if let Some(left_link) = config.links.single() {
-      (fomat!(r#"<a target="_blank" xlink:href=""# (left_link) r#"">"# (main) r#"</a>"#))
-  } else { (main) });
-
-  badge
-}
+// pub fn render_badge_format_macros_crate(config: RenderBadgeConfig, main: &str) -> String {
+//   let width = config.left_width + config.right_width;
+//
+//   let badge = fomat!(r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width=""# (width) r#"" height=""#
+//   (config.height) r#"" attributes>"# "title" if let Some(left_link) = config.links.single() {
+//       (fomat!(r#"<a target="_blank" xlink:href=""# (left_link) r#"">"# (main) r#"</a>"#))
+//   } else { (main) });
+//
+//   badge
+// }
 
 pub fn render_badge_new(config: RenderBadgeConfig, main: &str) -> String {
   let width = config.left_width + config.right_width;
