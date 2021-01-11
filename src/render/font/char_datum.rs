@@ -6,3 +6,9 @@ pub struct CharDatum {
   pub high: u32,
   pub width: f32,
 }
+
+impl CharDatum {
+  pub(crate) fn contains(&self, char: u32) -> bool {
+    char >= self.low && char <= self.high
+  }
+}
