@@ -1,7 +1,7 @@
 use crate::badge::style::Style::*;
 use crate::error::Error;
 use crate::error::Error::BadStyleChoice;
-use serde::export::Formatter;
+use std::fmt::Formatter;
 use std::fmt::Display;
 
 /// Used to define the style of a badge. Used in [BadgeBuilder.style()](crate::badge::BadgeBuilder)
