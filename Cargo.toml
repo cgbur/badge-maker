@@ -11,6 +11,10 @@ readme = "README.md"
 keywords = ["badge", "maker", "svg", "shield"]
 include = ["src/", "Cargo.toml", "fonts/verdana-11px-normal.bincode"]
 
+[[bin]]
+name="badge-maker"
+required-features=['cli']
+
 [features]
 default = []
 cli = ["clap"]
