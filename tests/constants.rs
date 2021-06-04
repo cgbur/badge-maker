@@ -2,7 +2,11 @@ use itertools::Itertools;
 use serde::{Deserialize, Serialize};
 
 pub const COLORS: [&str; 3] = ["brightgreen", "#c33", "#ff40b0"];
-pub const LABELS: [&str; 1] = [r##"<>;&Hello!!&"'"##]; // "💀💀emoji💀💀test💀💀" todo investigate
+pub const LABELS: [&str; 3] = [
+  r##"<>;&Hello!!&"'"##,
+  "This is a super long label testing some other things like compounding error possibilities",
+  "💀💀emoji💀💀test💀💀",
+];
 pub const STYLES: [&str; 3] = ["flat", "plastic", "flatsquare"];
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

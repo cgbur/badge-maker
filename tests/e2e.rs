@@ -95,9 +95,9 @@ fn e2e() {
     };
     #[cfg(windows)]
     match std::process::Command::new("tar")
-        .arg("-xf")
-        .arg("node_badge_maker.zip")
-        .spawn()
+      .arg("-xf")
+      .arg("node_badge_maker.zip")
+      .spawn()
     {
       Ok(p) => p.wait_with_output().unwrap(),
       Err(_) => {
@@ -111,12 +111,18 @@ fn e2e() {
   }
 
   let badges = get_badges();
+  // let badges = badges[0..20].to_vec();
   let badge_bytes = bincode::serialize(&badges).unwrap();
   let file_name = hash(&badge_bytes);
 
   let (mut results, did_load) = load(file_name);
 
-  for badge in badges {
+  println!(
+    "\t\tchecking {} badges for deviations from Node badge-maker...",
+    badges.len()
+  );
+
+  for badge in &badges {
     let rust = BadgeBuilder::new()
       .label(&badge.label)
       .message(&badge.message)
@@ -125,6 +131,7 @@ fn e2e() {
       .style_parse(&badge.style)
       .build()
       .unwrap();
+
     let test_id = rust.id().to_string();
 
     let node = results
@@ -135,6 +142,8 @@ fn e2e() {
 
     assert_eq!(node.to_string(), rust);
   }
+
+  println!("\t\tall badges matched");
 
   if !did_load && USE_CACHE {
     let mut file = File::create(format!("./cache/{}", file_name)).unwrap();

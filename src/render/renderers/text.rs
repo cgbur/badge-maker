@@ -102,11 +102,16 @@ pub fn render_text(config: RenderTextConfig) -> RenderTextReturn {
 
   let TextColoring { text, shadow } = colors_for_background(&config.color);
 
-  let mut buffer = if config.shadow {
-    String::with_capacity(160 + 150 + escaped_content.len() * 2)
+  let buffer_capacity = if config.shadow {
+    160 + 150 + escaped_content.len() * 2
   } else {
-    String::with_capacity(150 + escaped_content.len())
+    150 + escaped_content.len()
   };
+
+  let mut buffer = String::with_capacity(buffer_capacity);
+
+  #[cfg(debug_assertions)]
+  let start_cap = buffer.capacity();
 
   if config.shadow {
     buffer.push_str(r#"<text aria-hidden="true" x=""#);
@@ -134,6 +139,9 @@ pub fn render_text(config: RenderTextConfig) -> RenderTextReturn {
   buffer.push_str(&escaped_content);
   buffer.push_str(r#"</text>"#);
 
+  #[cfg(debug_assertions)]
+  assert_eq!(start_cap, buffer.capacity());
+
   let rendered_text = if let Some(link) = config.link.as_ref() {
     render_link(RenderLinkConfig {
       link,
@@ -141,7 +149,7 @@ pub fn render_text(config: RenderTextConfig) -> RenderTextReturn {
       text_length,
       horizontal_padding: config.horizontal_padding,
       left_margin: config.left_margin,
-      rendered_text: buffer,
+      rendered_text: &buffer,
     })
   } else {
     buffer
