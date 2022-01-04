@@ -10,50 +10,50 @@ use seahash::hash;
 ///
 /// Hashing is done as a escaping mechanism.
 fn gen_id(
-  label: &Option<String>,
-  message: &str,
-  label_color: &str,
-  color: &str,
-  style: &Style,
-  links: &Links,
-  logo: &Option<Logo>,
+    label: &Option<String>,
+    message: &str,
+    label_color: &str,
+    color: &str,
+    style: &Style,
+    links: &Links,
+    logo: &Option<Logo>,
 ) -> String {
-  let Logo {
-    url,
-    width,
-    padding,
-  } = logo.as_ref().cloned().unwrap_or(Logo {
-    url: "not_set".to_string(),
-    width: 0,
-    padding: 0,
-  });
+    let Logo {
+        url,
+        width,
+        padding,
+    } = logo.as_ref().cloned().unwrap_or(Logo {
+        url: "not_set".to_string(),
+        width: 0,
+        padding: 0,
+    });
 
-  let buf = vec![
-    label.as_ref().unwrap_or(&"not_set".to_string()).as_bytes(),
-    message.as_bytes(),
-    label_color.as_bytes(),
-    color.as_bytes(),
-    style.to_string().as_bytes(),
-    links
-      .left
-      .as_ref()
-      .unwrap_or(&"not_set".to_string())
-      .as_bytes(),
-    links
-      .right
-      .as_ref()
-      .unwrap_or(&"not_set".to_string())
-      .as_bytes(),
-    url.as_bytes(),
-    &width.to_be_bytes(),
-    &padding.to_be_bytes(),
-  ]
-  .iter()
-  .cloned()
-  .flatten()
-  .cloned()
-  .collect::<Vec<u8>>();
-  u64_to_hex(hash(&buf))
+    let buf = vec![
+        label.as_ref().unwrap_or(&"not_set".to_string()).as_bytes(),
+        message.as_bytes(),
+        label_color.as_bytes(),
+        color.as_bytes(),
+        style.to_string().as_bytes(),
+        links
+            .left
+            .as_ref()
+            .unwrap_or(&"not_set".to_string())
+            .as_bytes(),
+        links
+            .right
+            .as_ref()
+            .unwrap_or(&"not_set".to_string())
+            .as_bytes(),
+        url.as_bytes(),
+        &width.to_be_bytes(),
+        &padding.to_be_bytes(),
+    ]
+    .iter()
+    .cloned()
+    .flatten()
+    .cloned()
+    .collect::<Vec<u8>>();
+    u64_to_hex(hash(&buf))
 }
 
 /// Badges are valid and have all the necessary
@@ -75,20 +75,6 @@ fn gen_id(
 ///
 #[derive(Debug, Eq, PartialEq)]
 pub struct Badge {
-  label: Option<String>,
-  message: String,
-  label_color: String,
-  color: String,
-  style: Style,
-  links: Links,
-  logo: Option<Logo>,
-  id: String,
-  ids: String,
-  idr: String,
-}
-
-impl Badge {
-  pub(crate) fn new(
     label: Option<String>,
     message: String,
     label_color: String,
@@ -96,117 +82,131 @@ impl Badge {
     style: Style,
     links: Links,
     logo: Option<Logo>,
-  ) -> Self {
-    let id = gen_id(
-      &label,
-      &message,
-      &label_color,
-      &color,
-      &style,
-      &links,
-      &logo,
-    );
-    let ids = format!("bms-{}", id);
-    let idr = format!("bmr-{}", id);
+    id: String,
+    ids: String,
+    idr: String,
+}
 
-    Self {
-      label,
-      message,
-      label_color,
-      color,
-      style,
-      links,
-      logo,
-      id,
-      ids,
-      idr,
+impl Badge {
+    pub(crate) fn new(
+        label: Option<String>,
+        message: String,
+        label_color: String,
+        color: String,
+        style: Style,
+        links: Links,
+        logo: Option<Logo>,
+    ) -> Self {
+        let id = gen_id(
+            &label,
+            &message,
+            &label_color,
+            &color,
+            &style,
+            &links,
+            &logo,
+        );
+        let ids = format!("bms-{}", id);
+        let idr = format!("bmr-{}", id);
+
+        Self {
+            label,
+            message,
+            label_color,
+            color,
+            style,
+            links,
+            logo,
+            id,
+            ids,
+            idr,
+        }
     }
-  }
 
-  pub fn svg(&self) -> String {
-    match self.style {
-      Style::Flat => Flat::render(self),
-      Style::Plastic => Plastic::render(self),
-      Style::FlatSquare => FlatSquare::render(self),
+    pub fn svg(&self) -> String {
+        match self.style {
+            Style::Flat => Flat::render(self),
+            Style::Plastic => Plastic::render(self),
+            Style::FlatSquare => FlatSquare::render(self),
+        }
     }
-  }
 
-  pub fn label(&self) -> &Option<String> {
-    &self.label
-  }
+    pub fn label(&self) -> &Option<String> {
+        &self.label
+    }
 
-  pub fn message(&self) -> &str {
-    &self.message
-  }
+    pub fn message(&self) -> &str {
+        &self.message
+    }
 
-  pub fn label_color(&self) -> &str {
-    &self.label_color
-  }
+    pub fn label_color(&self) -> &str {
+        &self.label_color
+    }
 
-  pub fn color(&self) -> &str {
-    &self.color
-  }
+    pub fn color(&self) -> &str {
+        &self.color
+    }
 
-  pub fn style(&self) -> Style {
-    self.style
-  }
+    pub fn style(&self) -> Style {
+        self.style
+    }
 
-  pub fn links(&self) -> &Links {
-    &self.links
-  }
+    pub fn links(&self) -> &Links {
+        &self.links
+    }
 
-  pub fn logo(&self) -> &Option<Logo> {
-    &self.logo
-  }
+    pub fn logo(&self) -> &Option<Logo> {
+        &self.logo
+    }
 
-  pub fn ids(&self) -> &str {
-    &self.ids
-  }
+    pub fn ids(&self) -> &str {
+        &self.ids
+    }
 
-  pub fn idr(&self) -> &str {
-    &self.idr
-  }
-  pub fn id(&self) -> &str {
-    &self.id
-  }
+    pub fn idr(&self) -> &str {
+        &self.idr
+    }
+    pub fn id(&self) -> &str {
+        &self.id
+    }
 }
 
 #[cfg(test)]
 mod tests {
-  use super::*;
-  use crate::badge::style::Style::Flat;
+    use super::*;
+    use crate::badge::style::Style::Flat;
 
-  #[test]
-  fn gen_id_test() {
-    assert_eq!(
-      gen_id(
-        &Some("hello".to_string()),
-        "e",
-        "e",
-        "3",
-        &Flat,
-        &Links {
-          left: Option::from("hello".to_string()),
-          right: None
-        },
-        &None
-      ),
-      "e3f9ab42ba6abd5a"
-    );
-    assert_eq!(
-      gen_id(
-        &Some("hello".to_string()),
-        "message",
-        "label_color",
-        "#ec3d",
-        &Flat,
-        &Links {
-          left: None,
-          right: None
-        },
-        &None
-      ),
-      "a387ad147f28ca08"
-    );
-  }
+    #[test]
+    fn gen_id_test() {
+        assert_eq!(
+            gen_id(
+                &Some("hello".to_string()),
+                "e",
+                "e",
+                "3",
+                &Flat,
+                &Links {
+                    left: Option::from("hello".to_string()),
+                    right: None
+                },
+                &None
+            ),
+            "e3f9ab42ba6abd5a"
+        );
+        assert_eq!(
+            gen_id(
+                &Some("hello".to_string()),
+                "message",
+                "label_color",
+                "#ec3d",
+                &Flat,
+                &Links {
+                    left: None,
+                    right: None
+                },
+                &None
+            ),
+            "a387ad147f28ca08"
+        );
+    }
 }

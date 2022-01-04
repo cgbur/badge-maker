@@ -37,144 +37,145 @@ const XML_ESCAPE_PATTERNS: [&str; 5] = ["&", "<", ">", "\"", "'"];
 const XML_ESCAPE_REPLACEMENTS: [&str; 5] = ["&amp;", "&lt;", "&gt;", "&quot;", "&apos;"];
 
 lazy_static! {
-  static ref TRAILING_SPACE: Regex = Regex::new(r">\s+").unwrap();
+    static ref TRAILING_SPACE: Regex = Regex::new(r">\s+").unwrap();
 }
 
 lazy_static! {
-  static ref TRAILING_SPACE_BYTES: regex::bytes::Regex = regex::bytes::Regex::new(r">\s+").unwrap();
+    static ref TRAILING_SPACE_BYTES: regex::bytes::Regex =
+        regex::bytes::Regex::new(r">\s+").unwrap();
 }
 
 const XML_STRIP_TRAILING_PATTERNS_LEN: usize = 8;
 lazy_static! {
-  static ref XML_STRIP_TRAILING_PATTERNS: (Vec<String>, Vec<String>) = {
-    let a = aho_corasick_pattern_builder(XML_STRIP_TRAILING_PATTERNS_LEN, ">", " ");
-    let b = aho_corasick_pattern_builder(XML_STRIP_TRAILING_PATTERNS_LEN, ">\n", " ");
-    combine_builders(a, b)
-  };
+    static ref XML_STRIP_TRAILING_PATTERNS: (Vec<String>, Vec<String>) = {
+        let a = aho_corasick_pattern_builder(XML_STRIP_TRAILING_PATTERNS_LEN, ">", " ");
+        let b = aho_corasick_pattern_builder(XML_STRIP_TRAILING_PATTERNS_LEN, ">\n", " ");
+        combine_builders(a, b)
+    };
 }
 
 pub fn aho_corasick_pattern_builder(
-  size: usize,
-  start: &str,
-  onwards: &str,
+    size: usize,
+    start: &str,
+    onwards: &str,
 ) -> (Vec<String>, Vec<String>) {
-  // todo see if new lines are generating on windows
+    // todo see if new lines are generating on windows
 
-  let mut matches = vec![];
+    let mut matches = vec![];
 
-  let mut building = String::from(format!("{}{}", start, onwards));
-  for _ in 0..size {
-    matches.push(building.to_string());
-    building.push_str(onwards);
-  }
-  matches.reverse();
+    let mut building = String::from(format!("{}{}", start, onwards));
+    for _ in 0..size {
+        matches.push(building.to_string());
+        building.push_str(onwards);
+    }
+    matches.reverse();
 
-  (matches, vec![">".to_string(); size])
+    (matches, vec![">".to_string(); size])
 }
 
 pub fn strip_xml_trailing_str_find_iter(s: &str) -> String {
-  // let TRAILING_SPACE: Regex = Regex::new(r">\s+").unwrap();
-  let mut ret_string = String::with_capacity(s.len());
-  let mut last = 0;
-  for mat in TRAILING_SPACE.find_iter(&s) {
-    ret_string.push_str(&s[last..=mat.start()]);
-    last = mat.end();
-  }
-  ret_string.push_str(&s[last..s.len()]);
+    // let TRAILING_SPACE: Regex = Regex::new(r">\s+").unwrap();
+    let mut ret_string = String::with_capacity(s.len());
+    let mut last = 0;
+    for mat in TRAILING_SPACE.find_iter(&s) {
+        ret_string.push_str(&s[last..=mat.start()]);
+        last = mat.end();
+    }
+    ret_string.push_str(&s[last..s.len()]);
 
-  ret_string
+    ret_string
 }
 
 pub fn strip_xml_trailing_replace_all(s: &str) -> String {
-  TRAILING_SPACE.replace_all(s, ">").to_string()
+    TRAILING_SPACE.replace_all(s, ">").to_string()
 }
 
 pub fn strip_xml_trailing_aho(s: &str) -> String {
-  lazy_static! {
-    static ref AC: AhoCorasick = AhoCorasickBuilder::new()
-      .auto_configure(&XML_STRIP_TRAILING_PATTERNS.0)
-      .match_kind(MatchKind::LeftmostFirst)
-      .build(&XML_STRIP_TRAILING_PATTERNS.0);
-  };
+    lazy_static! {
+        static ref AC: AhoCorasick = AhoCorasickBuilder::new()
+            .auto_configure(&XML_STRIP_TRAILING_PATTERNS.0)
+            .match_kind(MatchKind::LeftmostFirst)
+            .build(&XML_STRIP_TRAILING_PATTERNS.0);
+    };
 
-  AC.replace_all(&s, &XML_STRIP_TRAILING_PATTERNS.1)
+    AC.replace_all(&s, &XML_STRIP_TRAILING_PATTERNS.1)
 }
 
 pub fn strip_xml_trailing_aho_sized(s: &str) -> String {
-  lazy_static! {
-    static ref AC: AhoCorasick<u16> = AhoCorasickBuilder::new()
-      .auto_configure(&XML_STRIP_TRAILING_PATTERNS.0)
-      .match_kind(MatchKind::LeftmostFirst)
-      .build_with_size(&XML_STRIP_TRAILING_PATTERNS.0)
-      .unwrap();
-  };
+    lazy_static! {
+        static ref AC: AhoCorasick<u16> = AhoCorasickBuilder::new()
+            .auto_configure(&XML_STRIP_TRAILING_PATTERNS.0)
+            .match_kind(MatchKind::LeftmostFirst)
+            .build_with_size(&XML_STRIP_TRAILING_PATTERNS.0)
+            .unwrap();
+    };
 
-  AC.replace_all(&s, &XML_STRIP_TRAILING_PATTERNS.1)
+    AC.replace_all(&s, &XML_STRIP_TRAILING_PATTERNS.1)
 }
 
 fn combine_builders(
-  (mut a, mut b): (Vec<String>, Vec<String>),
-  (mut aa, mut bb): (Vec<String>, Vec<String>),
+    (mut a, mut b): (Vec<String>, Vec<String>),
+    (mut aa, mut bb): (Vec<String>, Vec<String>),
 ) -> (Vec<String>, Vec<String>) {
-  a.append(&mut aa);
-  b.append(&mut bb);
-  (a, b)
+    a.append(&mut aa);
+    b.append(&mut bb);
+    (a, b)
 }
 
 pub fn escape_xml_old(s: &str) -> String {
-  s.replace('&', "&amp;")
-    .replace('<', "&lt;")
-    .replace('>', "&gt;")
-    .replace('"', "&quot;")
-    .replace('\'', "&apos;")
+    s.replace('&', "&amp;")
+        .replace('<', "&lt;")
+        .replace('>', "&gt;")
+        .replace('"', "&quot;")
+        .replace('\'', "&apos;")
 }
 
 pub fn escape_xml_static(s: &str) -> String {
-  lazy_static! {
-    static ref AC: AhoCorasick = AhoCorasickBuilder::new().build(&XML_ESCAPE_PATTERNS);
-  };
+    lazy_static! {
+        static ref AC: AhoCorasick = AhoCorasickBuilder::new().build(&XML_ESCAPE_PATTERNS);
+    };
 
-  AC.replace_all(s, &XML_ESCAPE_REPLACEMENTS)
+    AC.replace_all(s, &XML_ESCAPE_REPLACEMENTS)
 }
 
 pub fn escape_xml_optimized(s: &str) -> String {
-  lazy_static! {
-    static ref AC: AhoCorasick = AhoCorasickBuilder::new()
-      .dfa(true)
-      .build(&XML_ESCAPE_PATTERNS);
-  };
+    lazy_static! {
+        static ref AC: AhoCorasick = AhoCorasickBuilder::new()
+            .dfa(true)
+            .build(&XML_ESCAPE_PATTERNS);
+    };
 
-  AC.replace_all(s, &XML_ESCAPE_REPLACEMENTS)
+    AC.replace_all(s, &XML_ESCAPE_REPLACEMENTS)
 }
 
 pub fn escape_xml_auto_optimized(s: &str) -> String {
-  lazy_static! {
-    static ref AC: AhoCorasick = AhoCorasickBuilder::new()
-      .auto_configure(&XML_ESCAPE_REPLACEMENTS)
-      .build(&XML_ESCAPE_PATTERNS);
-  };
+    lazy_static! {
+        static ref AC: AhoCorasick = AhoCorasickBuilder::new()
+            .auto_configure(&XML_ESCAPE_REPLACEMENTS)
+            .build(&XML_ESCAPE_PATTERNS);
+    };
 
-  AC.replace_all(s, &XML_ESCAPE_REPLACEMENTS)
+    AC.replace_all(s, &XML_ESCAPE_REPLACEMENTS)
 }
 
 pub fn escape_xml_optimized_sized(s: &str) -> String {
-  lazy_static! {
-    static ref AC: AhoCorasick<u8> = AhoCorasickBuilder::new()
-      .dfa(true)
-      .build_with_size(&XML_ESCAPE_PATTERNS)
-      .unwrap();
-  };
+    lazy_static! {
+        static ref AC: AhoCorasick<u8> = AhoCorasickBuilder::new()
+            .dfa(true)
+            .build_with_size(&XML_ESCAPE_PATTERNS)
+            .unwrap();
+    };
 
-  AC.replace_all(s, &XML_ESCAPE_REPLACEMENTS)
+    AC.replace_all(s, &XML_ESCAPE_REPLACEMENTS)
 }
 
 pub fn escape_xml_auto_optimized_sized(s: &str) -> String {
-  lazy_static! {
-    static ref AC: AhoCorasick<u16> = AhoCorasickBuilder::new()
-      .auto_configure(&XML_ESCAPE_REPLACEMENTS)
-      .build_with_size(&XML_ESCAPE_PATTERNS)
-      .unwrap();
-  };
+    lazy_static! {
+        static ref AC: AhoCorasick<u16> = AhoCorasickBuilder::new()
+            .auto_configure(&XML_ESCAPE_REPLACEMENTS)
+            .build_with_size(&XML_ESCAPE_PATTERNS)
+            .unwrap();
+    };
 
-  AC.replace_all(s, &XML_ESCAPE_REPLACEMENTS)
+    AC.replace_all(s, &XML_ESCAPE_REPLACEMENTS)
 }
