@@ -1,4 +1,11 @@
  # Badge-Maker
+[![Crates.io][crates-badge]][crates-url]
+[![MIT licensed][mit-badge]][mit-url]
+
+[crates-badge]: https://img.shields.io/crates/v/badge-maker.svg
+[crates-url]: https://crates.io/crates/badge-maker
+[mit-badge]: https://img.shields.io/badge/license-MIT-blue.svg
+[mit-url]: https://github.com/cgburgess/badge-maker/blob/master/LICENSE
 
 _Links are generated from cargo, view on [docs](https://docs.rs/badge-maker/0.1.1/badge_maker/) page_
 
