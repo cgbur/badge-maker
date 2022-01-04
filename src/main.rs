@@ -1,7 +1,8 @@
 use badge_maker::BadgeBuilder;
-use clap::{Clap, ErrorKind};
+use clap::{App, ErrorKind};
+use clap::Parser;
 
-#[derive(Clap, Debug)]
+#[derive(Parser, Debug)]
 #[clap(name = "badge-maker", version = "0.1")]
 struct Opts {
     label: String,
@@ -13,9 +14,9 @@ struct Opts {
     #[clap(
     short,
     long("Style from [plastic, flat, flatsquare]"),
-    possible_values(&["flat", "plastic", "flatsquare"]),
-  default_value("flat")
-  )]
+    possible_values(& ["flat", "plastic", "flatsquare"]),
+    default_value("flat")
+    )]
     style: String,
 }
 
@@ -30,10 +31,8 @@ fn main() {
         .build()
     {
         Ok(badge) => println!("{}", badge.svg()),
-        Err(e) => clap::Error::with_description(
-            format!("Failed to build badge: {:?}", e),
-            ErrorKind::InvalidValue,
-        )
-        .exit(),
+        Err(e) => {
+            println!("Badge Error {:?}", e);
+        }
     }
 }
