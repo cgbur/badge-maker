@@ -38,285 +38,285 @@ pub(crate) const DEFAULT_STYLE: Style = Flat;
 /// ```
 #[derive(Default)]
 pub struct BadgeBuilder {
-  label: Option<String>,
-  message: Option<String>,
-  label_color: Option<Color>,
-  label_color_parse: Option<String>,
-  color: Option<Color>,
-  color_parse: Option<String>,
-  style: Option<Style>,
-  style_parse: Option<String>,
-  link: Option<String>,
-  links: Option<Links>,
-  logo: Option<Logo>,
-  logo_url: Option<String>,
-  logo_width: Option<usize>,
-  logo_padding: Option<isize>,
+    label: Option<String>,
+    message: Option<String>,
+    label_color: Option<Color>,
+    label_color_parse: Option<String>,
+    color: Option<Color>,
+    color_parse: Option<String>,
+    style: Option<Style>,
+    style_parse: Option<String>,
+    link: Option<String>,
+    links: Option<Links>,
+    logo: Option<Logo>,
+    logo_url: Option<String>,
+    logo_width: Option<usize>,
+    logo_padding: Option<isize>,
 }
 
 impl BadgeBuilder {
-  pub fn new() -> Self {
-    Self::default()
-  }
-
-  pub fn label(&mut self, label: &str) -> &mut Self {
-    self.label = Some(label.to_string());
-    self
-  }
-
-  pub fn message(&mut self, message: &str) -> &mut Self {
-    self.message = Some(message.to_string());
-    self
-  }
-
-  pub fn label_color_parse(&mut self, label_color: &str) -> &mut Self {
-    self.label_color_parse = Some(label_color.to_lowercase().replace(" ", ""));
-    self
-  }
-
-  pub fn label_color(&mut self, color: Color) -> &mut Self {
-    self.label_color = Some(color);
-    self
-  }
-
-  pub fn color_parse(&mut self, color: &str) -> &mut Self {
-    self.color_parse = Some(color.to_lowercase().replace(" ", ""));
-    self
-  }
-
-  pub fn color(&mut self, color: Color) -> &mut Self {
-    self.color = Some(color);
-    self
-  }
-
-  pub fn style_parse(&mut self, style: &str) -> &mut Self {
-    self.style_parse = Some(style.trim().to_lowercase());
-    self
-  }
-
-  pub fn style(&mut self, style: Style) -> &mut Self {
-    self.style = Some(style);
-    self
-  }
-
-  pub fn link(&mut self, link: &str) -> &mut Self {
-    self.link = Some(link.trim().to_string());
-    self
-  }
-
-  pub fn logo(&mut self, logo: Logo) -> &mut Self {
-    self.logo = Some(logo);
-    self
-  }
-
-  pub fn logo_url(&mut self, url: &str) -> &mut Self {
-    self.logo_url = Some(url.trim().to_string());
-    self
-  }
-
-  pub fn logo_width(&mut self, width: usize) -> &mut Self {
-    self.logo_width = Some(width);
-    self
-  }
-
-  pub fn logo_padding(&mut self, padding: isize) -> &mut Self {
-    self.logo_padding = Some(padding);
-    self
-  }
-
-  pub fn link_left(&mut self, link: &str) -> &mut Self {
-    let link = link.to_string();
-    if let Some(links) = self.links.as_mut() {
-      links.left = Some(link);
-    } else {
-      self.links = Some(Links {
-        left: Some(link),
-        right: None,
-      })
+    pub fn new() -> Self {
+        Self::default()
     }
-    self
-  }
 
-  pub fn link_right(&mut self, link: &str) -> &mut Self {
-    let link = link.to_string();
-    if let Some(links) = self.links.as_mut() {
-      links.right = Some(link);
-    } else {
-      self.links = Some(Links {
-        left: None,
-        right: Some(link),
-      })
+    pub fn label(&mut self, label: &str) -> &mut Self {
+        self.label = Some(label.to_string());
+        self
     }
-    self
-  }
 
-  pub fn build(&self) -> Result<Badge, Error> {
-    let message = self
-      .message
-      .as_ref()
-      .ok_or(MessageNotSet)?
-      .trim()
-      .to_string();
+    pub fn message(&mut self, message: &str) -> &mut Self {
+        self.message = Some(message.to_string());
+        self
+    }
 
-    let label = match self.label.as_ref() {
-      Some(label) => {
-        let label = label.trim().to_string();
-        if label.is_empty() {
-          None
+    pub fn label_color_parse(&mut self, label_color: &str) -> &mut Self {
+        self.label_color_parse = Some(label_color.to_lowercase().replace(" ", ""));
+        self
+    }
+
+    pub fn label_color(&mut self, color: Color) -> &mut Self {
+        self.label_color = Some(color);
+        self
+    }
+
+    pub fn color_parse(&mut self, color: &str) -> &mut Self {
+        self.color_parse = Some(color.to_lowercase().replace(" ", ""));
+        self
+    }
+
+    pub fn color(&mut self, color: Color) -> &mut Self {
+        self.color = Some(color);
+        self
+    }
+
+    pub fn style_parse(&mut self, style: &str) -> &mut Self {
+        self.style_parse = Some(style.trim().to_lowercase());
+        self
+    }
+
+    pub fn style(&mut self, style: Style) -> &mut Self {
+        self.style = Some(style);
+        self
+    }
+
+    pub fn link(&mut self, link: &str) -> &mut Self {
+        self.link = Some(link.trim().to_string());
+        self
+    }
+
+    pub fn logo(&mut self, logo: Logo) -> &mut Self {
+        self.logo = Some(logo);
+        self
+    }
+
+    pub fn logo_url(&mut self, url: &str) -> &mut Self {
+        self.logo_url = Some(url.trim().to_string());
+        self
+    }
+
+    pub fn logo_width(&mut self, width: usize) -> &mut Self {
+        self.logo_width = Some(width);
+        self
+    }
+
+    pub fn logo_padding(&mut self, padding: isize) -> &mut Self {
+        self.logo_padding = Some(padding);
+        self
+    }
+
+    pub fn link_left(&mut self, link: &str) -> &mut Self {
+        let link = link.to_string();
+        if let Some(links) = self.links.as_mut() {
+            links.left = Some(link);
         } else {
-          Some(label)
+            self.links = Some(Links {
+                left: Some(link),
+                right: None,
+            })
         }
-      }
-      None => None,
-    };
+        self
+    }
 
-    let style = if let Some(style) = self.style {
-      style
-    } else if let Some(style) = self.style_parse.as_ref() {
-      parse_style(style)?
-    } else {
-      DEFAULT_STYLE
-    };
+    pub fn link_right(&mut self, link: &str) -> &mut Self {
+        let link = link.to_string();
+        if let Some(links) = self.links.as_mut() {
+            links.right = Some(link);
+        } else {
+            self.links = Some(Links {
+                left: None,
+                right: Some(link),
+            })
+        }
+        self
+    }
 
-    let links = if let Some(links) = self.links.as_ref() {
-      links.clone()
-    } else if let Some(link) = self.link.as_ref() {
-      Links {
-        left: Some(link.to_string()),
-        right: None,
-      }
-    } else {
-      Links {
-        left: None,
-        right: None,
-      }
-    };
+    pub fn build(&self) -> Result<Badge, Error> {
+        let message = self
+            .message
+            .as_ref()
+            .ok_or(MessageNotSet)?
+            .trim()
+            .to_string();
 
-    let logo = if self.logo.is_some() {
-      self.logo.clone()
-    } else if let Some(url) = self.logo_url.as_ref() {
-      let width = self.logo_width.unwrap_or(DEFAULT_LOGO_WIDTH);
-      let padding = self.logo_padding.unwrap_or(DEFAULT_LOGO_PADDING);
-      Some(Logo::new(url.to_string(), width, padding))
-    } else {
-      None
-    };
+        let label = match self.label.as_ref() {
+            Some(label) => {
+                let label = label.trim().to_string();
+                if label.is_empty() {
+                    None
+                } else {
+                    Some(label)
+                }
+            }
+            None => None,
+        };
 
-    let color = get_color_from_option(false, self.color_parse.clone(), self.color.as_ref())?;
-    let label_color = get_color_from_option(
-      true,
-      self.label_color_parse.clone(),
-      self.label_color.as_ref(),
-    )?;
+        let style = if let Some(style) = self.style {
+            style
+        } else if let Some(style) = self.style_parse.as_ref() {
+            parse_style(style)?
+        } else {
+            DEFAULT_STYLE
+        };
 
-    Ok(Badge::new(
-      label,
-      message,
-      label_color,
-      color,
-      style,
-      links,
-      logo,
-    ))
-  }
+        let links = if let Some(links) = self.links.as_ref() {
+            links.clone()
+        } else if let Some(link) = self.link.as_ref() {
+            Links {
+                left: Some(link.to_string()),
+                right: None,
+            }
+        } else {
+            Links {
+                left: None,
+                right: None,
+            }
+        };
+
+        let logo = if self.logo.is_some() {
+            self.logo.clone()
+        } else if let Some(url) = self.logo_url.as_ref() {
+            let width = self.logo_width.unwrap_or(DEFAULT_LOGO_WIDTH);
+            let padding = self.logo_padding.unwrap_or(DEFAULT_LOGO_PADDING);
+            Some(Logo::new(url.to_string(), width, padding))
+        } else {
+            None
+        };
+
+        let color = get_color_from_option(false, self.color_parse.clone(), self.color.as_ref())?;
+        let label_color = get_color_from_option(
+            true,
+            self.label_color_parse.clone(),
+            self.label_color.as_ref(),
+        )?;
+
+        Ok(Badge::new(
+            label,
+            message,
+            label_color,
+            color,
+            style,
+            links,
+            logo,
+        ))
+    }
 }
 
 #[cfg(test)]
 mod tests {
-  use crate::badge::badge_builder::BadgeBuilder;
+    use crate::badge::badge_builder::BadgeBuilder;
 
-  use crate::badge::{DEFAULT_LABEL_COLOR, DEFAULT_MESSAGE_COLOR};
-  use crate::{Badge, Links, Style};
+    use crate::badge::{DEFAULT_LABEL_COLOR, DEFAULT_MESSAGE_COLOR};
+    use crate::{Badge, Links, Style};
 
-  #[test]
-  fn badge_builder_text() {
-    assert_eq!(
-      BadgeBuilder::new()
-        .label(" Hello one ")
-        .message(" there two  ")
-        .build()
-        .unwrap(),
-      Badge::new(
-        Some("Hello one".to_string()),
-        "there two".to_string(),
-        DEFAULT_LABEL_COLOR.hex().to_string(),
-        DEFAULT_MESSAGE_COLOR.hex().to_string(),
-        Style::Flat,
-        Links {
-          left: None,
-          right: None
-        },
-        None
-      )
-    );
-  }
+    #[test]
+    fn badge_builder_text() {
+        assert_eq!(
+            BadgeBuilder::new()
+                .label(" Hello one ")
+                .message(" there two  ")
+                .build()
+                .unwrap(),
+            Badge::new(
+                Some("Hello one".to_string()),
+                "there two".to_string(),
+                DEFAULT_LABEL_COLOR.hex().to_string(),
+                DEFAULT_MESSAGE_COLOR.hex().to_string(),
+                Style::Flat,
+                Links {
+                    left: None,
+                    right: None
+                },
+                None
+            )
+        );
+    }
 
-  #[test]
-  fn badge_builder_color_parse() {
-    assert_eq!(
-      BadgeBuilder::new()
-        .label(" Hello one ")
-        .message(" there two  ")
-        .label_color_parse("#cab")
-        .color_parse("#cab")
-        .build()
-        .unwrap(),
-      Badge::new(
-        Some("Hello one".to_string()),
-        "there two".to_string(),
-        "#cab".to_string(),
-        "#cab".to_string(),
-        Style::Flat,
-        Links {
-          left: None,
-          right: None
-        },
-        None
-      )
-    );
+    #[test]
+    fn badge_builder_color_parse() {
+        assert_eq!(
+            BadgeBuilder::new()
+                .label(" Hello one ")
+                .message(" there two  ")
+                .label_color_parse("#cab")
+                .color_parse("#cab")
+                .build()
+                .unwrap(),
+            Badge::new(
+                Some("Hello one".to_string()),
+                "there two".to_string(),
+                "#cab".to_string(),
+                "#cab".to_string(),
+                Style::Flat,
+                Links {
+                    left: None,
+                    right: None
+                },
+                None
+            )
+        );
 
-    assert_eq!(
-      BadgeBuilder::new()
-        .label(" Hello one ")
-        .message(" there two  ")
-        .label_color_parse("cab")
-        .color_parse("CAB")
-        .build()
-        .unwrap(),
-      Badge::new(
-        Some("Hello one".to_string()),
-        "there two".to_string(),
-        "#cab".to_string(),
-        "#cab".to_string(),
-        Style::Flat,
-        Links {
-          left: None,
-          right: None
-        },
-        None
-      )
-    );
+        assert_eq!(
+            BadgeBuilder::new()
+                .label(" Hello one ")
+                .message(" there two  ")
+                .label_color_parse("cab")
+                .color_parse("CAB")
+                .build()
+                .unwrap(),
+            Badge::new(
+                Some("Hello one".to_string()),
+                "there two".to_string(),
+                "#cab".to_string(),
+                "#cab".to_string(),
+                Style::Flat,
+                Links {
+                    left: None,
+                    right: None
+                },
+                None
+            )
+        );
 
-    assert_eq!(
-      BadgeBuilder::new()
-        .label(" Hello one ")
-        .message(" there two  ")
-        .label_color_parse("rgb(10, 200, 50)")
-        .color_parse("   RGB(10,200,50)   ")
-        .build()
-        .unwrap(),
-      Badge::new(
-        Some("Hello one".to_string()),
-        "there two".to_string(),
-        "#0ac832".to_string(),
-        "#0ac832".to_string(),
-        Style::Flat,
-        Links {
-          left: None,
-          right: None
-        },
-        None
-      )
-    );
-  }
+        assert_eq!(
+            BadgeBuilder::new()
+                .label(" Hello one ")
+                .message(" there two  ")
+                .label_color_parse("rgb(10, 200, 50)")
+                .color_parse("   RGB(10,200,50)   ")
+                .build()
+                .unwrap(),
+            Badge::new(
+                Some("Hello one".to_string()),
+                "there two".to_string(),
+                "#0ac832".to_string(),
+                "#0ac832".to_string(),
+                Style::Flat,
+                Links {
+                    left: None,
+                    right: None
+                },
+                None
+            )
+        );
+    }
 }

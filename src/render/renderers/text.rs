@@ -5,20 +5,20 @@ use crate::render::util::text::{colors_for_background, preferred_width, TextColo
 use crate::render::util::xml::escape_xml;
 
 pub struct RenderTextConfig<'a> {
-  pub left_margin: isize,
-  pub horizontal_padding: usize,
-  pub content: &'a str,
-  pub height: usize,
-  pub vertical_margin: isize,
-  pub shadow: bool,
-  pub color: &'a str,
-  pub link: &'a Option<String>,
-  pub font: &'a Font,
+    pub left_margin: isize,
+    pub horizontal_padding: usize,
+    pub content: &'a str,
+    pub height: usize,
+    pub vertical_margin: isize,
+    pub shadow: bool,
+    pub color: &'a str,
+    pub link: &'a Option<String>,
+    pub font: &'a Font,
 }
 
 pub struct RenderTextReturn {
-  pub text: String,
-  pub width: usize,
+    pub text: String,
+    pub width: usize,
 }
 
 // pub fn render_text_new(config: RenderTextConfig) -> RenderTextReturn {
@@ -83,127 +83,127 @@ pub struct RenderTextReturn {
 // }
 
 pub fn render_text(config: RenderTextConfig) -> RenderTextReturn {
-  if config.content.is_empty() {
-    return RenderTextReturn {
-      text: "".to_string(),
-      width: 0,
+    if config.content.is_empty() {
+        return RenderTextReturn {
+            text: "".to_string(),
+            width: 0,
+        };
+    }
+
+    let text_length = preferred_width(&config.content, config.font);
+    let escaped_content = escape_xml(&config.content);
+
+    let shadow_margin = 150 + config.vertical_margin;
+    let text_margin = 140 + config.vertical_margin;
+    let out_text_length = 10 * text_length;
+
+    let x = 10.0
+        * (config.left_margin as f32 + 0.5 * text_length as f32 + config.horizontal_padding as f32);
+
+    let TextColoring { text, shadow } = colors_for_background(&config.color);
+
+    let buffer_capacity = if config.shadow {
+        160 + 150 + escaped_content.len() * 2
+    } else {
+        150 + escaped_content.len()
     };
-  }
 
-  let text_length = preferred_width(&config.content, config.font);
-  let escaped_content = escape_xml(&config.content);
+    let mut buffer = String::with_capacity(buffer_capacity);
 
-  let shadow_margin = 150 + config.vertical_margin;
-  let text_margin = 140 + config.vertical_margin;
-  let out_text_length = 10 * text_length;
+    #[cfg(debug_assertions)]
+    let start_cap = buffer.capacity();
 
-  let x = 10.0
-    * (config.left_margin as f32 + 0.5 * text_length as f32 + config.horizontal_padding as f32);
+    if config.shadow {
+        buffer.push_str(r#"<text aria-hidden="true" x=""#);
+        itoa::fmt(&mut buffer, x as u32).unwrap_or(());
+        buffer.push_str(r#"" y=""#);
+        itoa::fmt(&mut buffer, shadow_margin).unwrap_or(());
+        buffer.push_str(r#"" fill=""#);
+        buffer.push_str(shadow);
+        buffer.push_str(r#"" fill-opacity=".3" transform="scale(.1)" textLength=""#);
+        itoa::fmt(&mut buffer, out_text_length).unwrap_or(());
+        buffer.push_str(r#"">"#);
+        buffer.push_str(&escaped_content);
+        buffer.push_str("</text>");
+    };
 
-  let TextColoring { text, shadow } = colors_for_background(&config.color);
-
-  let buffer_capacity = if config.shadow {
-    160 + 150 + escaped_content.len() * 2
-  } else {
-    150 + escaped_content.len()
-  };
-
-  let mut buffer = String::with_capacity(buffer_capacity);
-
-  #[cfg(debug_assertions)]
-  let start_cap = buffer.capacity();
-
-  if config.shadow {
-    buffer.push_str(r#"<text aria-hidden="true" x=""#);
+    buffer.push_str(r#"<text x=""#);
     itoa::fmt(&mut buffer, x as u32).unwrap_or(());
     buffer.push_str(r#"" y=""#);
-    itoa::fmt(&mut buffer, shadow_margin).unwrap_or(());
-    buffer.push_str(r#"" fill=""#);
-    buffer.push_str(shadow);
-    buffer.push_str(r#"" fill-opacity=".3" transform="scale(.1)" textLength=""#);
+    itoa::fmt(&mut buffer, text_margin).unwrap_or(());
+    buffer.push_str(r#"" transform="scale(.1)" fill=""#);
+    buffer.push_str(text);
+    buffer.push_str(r#"" textLength=""#);
     itoa::fmt(&mut buffer, out_text_length).unwrap_or(());
     buffer.push_str(r#"">"#);
     buffer.push_str(&escaped_content);
-    buffer.push_str("</text>");
-  };
+    buffer.push_str(r#"</text>"#);
 
-  buffer.push_str(r#"<text x=""#);
-  itoa::fmt(&mut buffer, x as u32).unwrap_or(());
-  buffer.push_str(r#"" y=""#);
-  itoa::fmt(&mut buffer, text_margin).unwrap_or(());
-  buffer.push_str(r#"" transform="scale(.1)" fill=""#);
-  buffer.push_str(text);
-  buffer.push_str(r#"" textLength=""#);
-  itoa::fmt(&mut buffer, out_text_length).unwrap_or(());
-  buffer.push_str(r#"">"#);
-  buffer.push_str(&escaped_content);
-  buffer.push_str(r#"</text>"#);
+    #[cfg(debug_assertions)]
+    assert_eq!(start_cap, buffer.capacity());
 
-  #[cfg(debug_assertions)]
-  assert_eq!(start_cap, buffer.capacity());
+    let rendered_text = if let Some(link) = config.link.as_ref() {
+        render_link(RenderLinkConfig {
+            link,
+            height: config.height,
+            text_length,
+            horizontal_padding: config.horizontal_padding,
+            left_margin: config.left_margin,
+            rendered_text: &buffer,
+        })
+    } else {
+        buffer
+    };
 
-  let rendered_text = if let Some(link) = config.link.as_ref() {
-    render_link(RenderLinkConfig {
-      link,
-      height: config.height,
-      text_length,
-      horizontal_padding: config.horizontal_padding,
-      left_margin: config.left_margin,
-      rendered_text: &buffer,
-    })
-  } else {
-    buffer
-  };
-
-  RenderTextReturn {
-    text: rendered_text,
-    width: text_length,
-  }
+    RenderTextReturn {
+        text: rendered_text,
+        width: text_length,
+    }
 }
 
 #[cfg(test)]
 mod tests {
-  use super::*;
+    use super::*;
 
-  #[test]
-  fn render_text_test() {
-    let s = render_text(RenderTextConfig {
-      left_margin: 12,
-      horizontal_padding: 13,
-      content: "content<>",
-      height: 20,
-      vertical_margin: 2,
-      shadow: true,
-      color: &"#ccc".to_string(),
-      link: &None,
-      font: &Font::Verdana11Px,
-    });
+    #[test]
+    fn render_text_test() {
+        let s = render_text(RenderTextConfig {
+            left_margin: 12,
+            horizontal_padding: 13,
+            content: "content<>",
+            height: 20,
+            vertical_margin: 2,
+            shadow: true,
+            color: &"#ccc".to_string(),
+            link: &None,
+            font: &Font::Verdana11Px,
+        });
 
-    assert_eq!(
-      s.text,
-      r##"<text aria-hidden="true" x="545" y="152" fill="#ccc" fill-opacity=".3" transform="scale(.1)" textLength="590">content&lt;&gt;</text><text x="545" y="142" transform="scale(.1)" fill="#333" textLength="590">content&lt;&gt;</text>"##
-    );
-    assert_eq!(s.width, 59);
-  }
+        assert_eq!(
+            s.text,
+            r##"<text aria-hidden="true" x="545" y="152" fill="#ccc" fill-opacity=".3" transform="scale(.1)" textLength="590">content&lt;&gt;</text><text x="545" y="142" transform="scale(.1)" fill="#333" textLength="590">content&lt;&gt;</text>"##
+        );
+        assert_eq!(s.width, 59);
+    }
 
-  #[test]
-  fn render_text_no_shadow_test() {
-    let s = render_text(RenderTextConfig {
-      left_margin: 12,
-      horizontal_padding: 13,
-      content: "content<>",
-      height: 20,
-      vertical_margin: 2,
-      shadow: false,
-      color: &"#ccc".to_string(),
-      link: &None,
-      font: &Font::Verdana11Px,
-    });
+    #[test]
+    fn render_text_no_shadow_test() {
+        let s = render_text(RenderTextConfig {
+            left_margin: 12,
+            horizontal_padding: 13,
+            content: "content<>",
+            height: 20,
+            vertical_margin: 2,
+            shadow: false,
+            color: &"#ccc".to_string(),
+            link: &None,
+            font: &Font::Verdana11Px,
+        });
 
-    assert_eq!(
-      s.text,
-      r##"<text x="545" y="142" transform="scale(.1)" fill="#333" textLength="590">content&lt;&gt;</text>"##
-    );
-    assert_eq!(s.width, 59);
-  }
+        assert_eq!(
+            s.text,
+            r##"<text x="545" y="142" transform="scale(.1)" fill="#333" textLength="590">content&lt;&gt;</text>"##
+        );
+        assert_eq!(s.width, 59);
+    }
 }
