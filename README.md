@@ -87,6 +87,10 @@ _Links are generated from cargo, view on [docs](https://docs.rs/badge-maker/0.1.
  ```bash
  badge-maker example badge -c informational -l #282828 -s flat
  ```
+ on windows the `#` needs to be handled specially
+ ```bash
+ badge-maker example badge -c informational -l "#282828" -s flat
+ ```
 
 
  ### [Colors](Color)
