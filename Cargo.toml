@@ -12,8 +12,8 @@ keywords = ["badge", "maker", "svg", "shield"]
 include = ["src/", "Cargo.toml", "fonts/verdana-11px-normal.bincode"]
 
 [[bin]]
-name="badge-maker"
-required-features=['cli']
+name = "badge-maker"
+required-features = ['cli']
 
 [features]
 default = []
@@ -23,11 +23,11 @@ cli = ["clap"]
 lazy_static = "1.4.0"
 regex = "1.5.4"
 thiserror = "1.0.30"
-serde = { version= "1.0.133", features = ["derive"]}
+serde = { version = "1.0.133", features = ["derive"] }
 bincode = "1.3.3"
 aho-corasick = "0.7.18"
 seahash = "4.1.0"
-clap = {version = "3.0.3", features=["derive"],optional = true}
+clap = { version = "3.0.4", features = ["derive"], optional = true }
 itoa = "0.4.7"
 
 [[bench]]

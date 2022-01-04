@@ -1,9 +1,7 @@
 use badge_maker::BadgeBuilder;
-use clap::{App, ErrorKind};
-use clap::Parser;
 
-#[derive(Parser, Debug)]
-#[clap(name = "badge-maker", version = "0.1")]
+#[derive(clap::Parser, Debug)]
+#[clap(name = "badge-maker")]
 struct Opts {
     label: String,
     message: String,
@@ -15,8 +13,7 @@ struct Opts {
     short,
     long("Style from [plastic, flat, flatsquare]"),
     possible_values(& ["flat", "plastic", "flatsquare"]),
-    default_value("flat")
-    )]
+    default_value("flat"))]
     style: String,
 }
 
