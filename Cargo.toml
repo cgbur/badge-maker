@@ -1,6 +1,6 @@
 [package]
 name = "badge-maker"
-version = "0.1.4"
+version = "0.2.0"
 authors = ["Chris Burgess <cgburgess10@gmail.com>"]
 description = "It makes badges."
 homepage = "https://github.com/cgburgess/badge-maker"
