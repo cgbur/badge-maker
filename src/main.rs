@@ -1,4 +1,5 @@
 use badge_maker::BadgeBuilder;
+use clap::Parser;
 
 #[derive(clap::Parser, Debug)]
 #[clap(name = "badge-maker")]
