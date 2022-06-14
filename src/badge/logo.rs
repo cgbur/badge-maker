@@ -9,6 +9,8 @@ pub enum Logo {
     },
     /// SVG Based Logo
     /// If the color attribute is set it will try to add one. This allows for changing of the fill color of the SVG.
+    ///
+    /// Simple Icons provides a list of SVG based logos: https://simpleicons.org/
     /// ```rust
     ///  use badge_maker::error::Error;
     /// use badge_maker::{BadgeBuilder, Logo};
@@ -19,6 +21,7 @@ pub enum Logo {
     ///     width: 100,
     ///    padding: 10,
     /// }).build().unwrap();
+    ///
     /// println!("{}", badge.svg());
     ///
     /// ```
