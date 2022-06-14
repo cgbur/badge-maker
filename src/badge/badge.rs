@@ -1,3 +1,5 @@
+use std::collections::hash_map::DefaultHasher;
+use std::hash::{Hash, Hasher};
 use crate::badge::color::util::u64_to_hex;
 use crate::badge::style::Style;
 use crate::badge::{Links, Logo};
@@ -18,42 +20,16 @@ fn gen_id(
     links: &Links,
     logo: &Option<Logo>,
 ) -> String {
-    let Logo {
-        url,
-        width,
-        padding,
-    } = logo.as_ref().cloned().unwrap_or(Logo {
-        url: "not_set".to_string(),
-        width: 0,
-        padding: 0,
-    });
-
-    let buf = vec![
-        label.as_ref().unwrap_or(&"not_set".to_string()).as_bytes(),
-        message.as_bytes(),
-        label_color.as_bytes(),
-        color.as_bytes(),
-        style.to_string().as_bytes(),
-        links
-            .left
-            .as_ref()
-            .unwrap_or(&"not_set".to_string())
-            .as_bytes(),
-        links
-            .right
-            .as_ref()
-            .unwrap_or(&"not_set".to_string())
-            .as_bytes(),
-        url.as_bytes(),
-        &width.to_be_bytes(),
-        &padding.to_be_bytes(),
-    ]
-    .iter()
-    .cloned()
-    .flatten()
-    .cloned()
-    .collect::<Vec<u8>>();
-    u64_to_hex(hash(&buf))
+    let mut hasher = seahash::SeaHasher::new();
+    logo.hash(&mut hasher);
+    label.hash(&mut hasher);
+    label_color.hash(&mut hasher);
+    color.hash(&mut hasher);
+    style.hash(&mut hasher);
+    message.hash(&mut hasher);
+    links.left.hash(&mut hasher);
+    links.right.hash(&mut hasher);
+    u64_to_hex(hasher.finish())
 }
 
 /// Badges are valid and have all the necessary
@@ -187,11 +163,11 @@ mod tests {
                 &Flat,
                 &Links {
                     left: Option::from("hello".to_string()),
-                    right: None
+                    right: None,
                 },
-                &None
+                &None,
             ),
-            "e3f9ab42ba6abd5a"
+            "95efd3465e2fbf49"
         );
         assert_eq!(
             gen_id(
@@ -202,11 +178,11 @@ mod tests {
                 &Flat,
                 &Links {
                     left: None,
-                    right: None
+                    right: None,
                 },
-                &None
+                &None,
             ),
-            "a387ad147f28ca08"
+            "81df87a2241d1ad9"
         );
     }
 }

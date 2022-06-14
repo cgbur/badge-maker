@@ -1,11 +1,11 @@
 use crate::badge::Logo;
-use crate::render::util::xml::escape_xml;
+use crate::render::util::xml::{escape_xml, replace_fill_attribute};
 
 const RAW_STR_LEN: usize = 47;
 const NUM_STR_LEN: usize = 14;
-
-pub struct RenderLogoConfig<'a> {
-    pub logo: &'a Option<Logo>,
+const BASE_64_SVG_IMAGE: &str="data:image/svg+xml;base64,";
+pub struct RenderLogoConfig<'logo> {
+    pub logo: &'logo Option<Logo>,
     pub badge_height: usize,
     pub horizontal_padding: usize,
 }
@@ -24,12 +24,24 @@ pub fn render_logo(config: RenderLogoConfig) -> RenderLogoReturn {
         };
     }
 
-    let logo = config.logo.clone().unwrap();
+    let logo = config.logo.as_ref().unwrap();
 
     let logo_height = 14;
     let y = (config.badge_height - logo_height) / 2;
     let x = config.horizontal_padding;
-    let escaped_logo = escape_xml(logo.url());
+    let escaped_logo = match logo {
+        Logo::LogoImage { url,.. } => {
+          escape_xml(url)
+        }
+        Logo::SVGLogo { svg,color,.. } => {
+            if let Some(ref color) = color {
+                let value = replace_fill_attribute(svg, &format!("fill=\"{}\"", color));
+                format!("{}{}",BASE_64_SVG_IMAGE,base64::encode(value))
+            } else {
+                format!("{}{}",BASE_64_SVG_IMAGE,base64::encode(svg))
+            }
+        }
+    };
 
     let mut buffer = String::with_capacity(RAW_STR_LEN + NUM_STR_LEN + escaped_logo.len());
 
@@ -76,7 +88,7 @@ mod tests {
         );
         assert_eq!(
             render_logo(RenderLogoConfig {
-                logo: &Some(Logo {
+                logo: &Some(Logo::LogoImage {
                     url: "some_<>url".to_string(),
                     width: 20,
                     padding: 25

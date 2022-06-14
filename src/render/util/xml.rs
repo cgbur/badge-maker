@@ -1,5 +1,6 @@
 use aho_corasick::{AhoCorasick, AhoCorasickBuilder, MatchKind};
 use lazy_static::lazy_static;
+use regex::Regex;
 
 const XML_ESCAPE_PATTERNS: [&str; 5] = ["&", "<", ">", "\"", "'"];
 const XML_ESCAPE_REPLACEMENTS: [&str; 5] = ["&amp;", "&lt;", "&gt;", "&quot;", "&apos;"];
@@ -14,13 +15,35 @@ lazy_static! {
     };
 }
 
+/// Finds the fill value defined or if not defined will add a default value.
+/// # Arguments
+/// `svg` - The svg to search.
+/// `replace_with` - The value to replace the fill with.
+pub(crate) fn replace_fill_attribute(svg: &str, replace_with: &str) -> String {
+    lazy_static! {
+        static ref FILL_PATTERN:Regex = Regex::new(r"fill=[^\s]+").unwrap();
+    }
+    if FILL_PATTERN.is_match(svg) {
+        FILL_PATTERN.replace_all(svg, replace_with).to_string()
+    } else {
+        svg.replace("<svg", &format!("<svg {}", replace_with))
+    }
+}
+
+#[test]
+pub fn test_replace_fill_attribute() {
+    assert_eq!("<svg fill=\"#ffffff\"", replace_fill_attribute("<svg fill=\"#000000\"", "fill=\"#ffffff\""));
+    assert_eq!("<svg fill=\"#ffffff\"", replace_fill_attribute("<svg", "fill=\"#ffffff\""));
+}
+
+
 fn strip_xml_trailing_aho(s: &str) -> String {
     lazy_static! {
         static ref AC: AhoCorasick = AhoCorasickBuilder::new()
             .auto_configure(&XML_STRIP_TRAILING_PATTERNS.0)
             .match_kind(MatchKind::LeftmostFirst)
             .build(&XML_STRIP_TRAILING_PATTERNS.0);
-    };
+    }
 
     AC.replace_all(&s, &XML_STRIP_TRAILING_PATTERNS.1)
 }
@@ -30,7 +53,7 @@ pub(crate) fn escape_xml(s: &str) -> String {
         static ref AC: AhoCorasick = AhoCorasickBuilder::new()
             .dfa(true)
             .build(&XML_ESCAPE_PATTERNS);
-    };
+    }
 
     AC.replace_all(s, &XML_ESCAPE_REPLACEMENTS)
 }
@@ -70,6 +93,7 @@ fn combine_builders(
 #[cfg(test)]
 mod tests {
     use crate::render::util::xml::{escape_xml, strip_xml_whitespace};
+
     const SVG_TO_STRIP: &'static str = r###"<svg xmlns="http://www.w3.org/2000/svg" aria-label="i">
     <title>i </title>
     <linearGradient id="s" x2="0" y2="100%">
@@ -77,6 +101,7 @@ mod tests {
         <stop offset="1" stop-opacity=".1"/>
     </linearGradient>
      </svg>"###;
+
     #[test]
     fn escape_xml_test() {
         assert_eq!(

@@ -1,11 +1,32 @@
+use std::fmt::{Display, Formatter};
+
+#[derive(Debug, PartialEq, Eq, Clone, Hash)]
 pub enum Color {
     Named(NamedColor),
     Alias(AliasColor),
     Rgb(u8, u8, u8),
 }
 
+impl Display for Color {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Color::Named(named) => {
+                write!(f, "{}", named.hex())
+            }
+
+            Color::Alias(alias) => {
+                write!(f, "{}", alias.hex())
+            }
+            Color::Rgb(r, g, b) => {
+                write!(f, "rgb({},{},{})", r, g, b)
+            }
+        }
+    }
+}
+
 /// Colors from the
 /// [badge-maker](https://github.com/badges/shields/blob/master/badge-maker/lib/color.js) spec
+#[derive(Debug, PartialEq, Eq, Clone, Hash)]
 pub enum NamedColor {
     BrightGreen,
     Green,
@@ -18,6 +39,7 @@ pub enum NamedColor {
     LightGrey,
 }
 
+#[derive(Debug, PartialEq, Eq, Clone, Hash)]
 pub enum AliasColor {
     Gray,
     LightGray,
@@ -55,5 +77,23 @@ impl AliasColor {
             AliasColor::Informational => NamedColor::Blue.hex(),
             AliasColor::Inactive => NamedColor::LightGrey.hex(),
         }
+    }
+}
+
+impl From<AliasColor> for Color {
+    fn from(alias: AliasColor) -> Self {
+        Color::Alias(alias)
+    }
+}
+
+impl From<NamedColor> for Color {
+    fn from(named: NamedColor) -> Self {
+        Color::Named(named)
+    }
+}
+
+impl From<(u8, u8, u8)> for Color {
+    fn from((r, g, b): (u8, u8, u8)) -> Self {
+        Self::Rgb(r, g, b)
     }
 }
