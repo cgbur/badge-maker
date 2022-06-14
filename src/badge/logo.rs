@@ -1,4 +1,3 @@
-use std::borrow::Cow;
 use crate::color::Color;
 
 #[derive(Debug, Clone, Eq, PartialEq, Hash)]
@@ -50,7 +49,7 @@ impl Logo {
     pub fn url(&self) -> &str {
         match self {
             Self::LogoImage { url, .. } => url,
-            Self::SVGLogo { svg, .. } => panic!("SVGLogo::url() called on SVGLogo"),
+            Self::SVGLogo { .. } => panic!("SVGLogo::url() called on SVGLogo"),
         }
     }
 

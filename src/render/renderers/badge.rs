@@ -1,3 +1,5 @@
+use std::fmt::Write;
+use itoa::Buffer;
 use crate::badge::Links;
 use crate::render::renderers::{render_attributes, render_title};
 use crate::render::util::xml::strip_xml_whitespace;
@@ -58,12 +60,13 @@ pub fn render_badge(config: RenderBadgeConfig, main: &str) -> String {
     );
 
     #[cfg(debug_assertions)]
+    let mut itoa_buffer = Buffer::new();
     let start_cap = buffer.capacity();
-
     buffer.push_str(r##"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width=""##);
-    itoa::fmt(&mut buffer, width).unwrap();
+
+    buffer.write_str(itoa_buffer.format(width)).unwrap();
     buffer.push_str(r#"" height=""#);
-    itoa::fmt(&mut buffer, config.height).unwrap();
+    buffer.write_str(itoa_buffer.format(config.height)).unwrap();
     buffer.push_str(r#"" "#);
 
     buffer.push_str(&attributes);

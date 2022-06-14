@@ -70,7 +70,7 @@ impl BadgeBuilder {
     }
 
     pub fn label_color_parse(&mut self, label_color: &str) -> &mut Self {
-        self.label_color_parse = Some(label_color.to_lowercase().replace(" ", ""));
+        self.label_color_parse = Some(label_color.to_lowercase().replace(' ', ""));
         self
     }
 
@@ -80,7 +80,7 @@ impl BadgeBuilder {
     }
 
     pub fn color_parse(&mut self, color: &str) -> &mut Self {
-        self.color_parse = Some(color.to_lowercase().replace(" ", ""));
+        self.color_parse = Some(color.to_lowercase().replace(' ', ""));
         self
     }
 

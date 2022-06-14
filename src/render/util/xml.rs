@@ -45,7 +45,7 @@ fn strip_xml_trailing_aho(s: &str) -> String {
             .build(&XML_STRIP_TRAILING_PATTERNS.0);
     }
 
-    AC.replace_all(&s, &XML_STRIP_TRAILING_PATTERNS.1)
+    AC.replace_all(s, &XML_STRIP_TRAILING_PATTERNS.1)
 }
 
 pub(crate) fn escape_xml(s: &str) -> String {

@@ -1,4 +1,3 @@
-use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};
 use crate::badge::color::util::u64_to_hex;
 use crate::badge::style::Style;
@@ -6,7 +5,6 @@ use crate::badge::{Links, Logo};
 
 use crate::render::renderers::styles::*;
 use crate::render::BadgeRenderer;
-use seahash::hash;
 
 /// The purpose of a unique id is to make the svg compatible with direct website embedding.
 ///

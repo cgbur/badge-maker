@@ -1,3 +1,5 @@
+use std::fmt::Write;
+use itoa::Buffer;
 use crate::badge::Logo;
 use crate::render::util::xml::{escape_xml, replace_fill_attribute};
 
@@ -47,15 +49,16 @@ pub fn render_logo(config: RenderLogoConfig) -> RenderLogoReturn {
 
     #[cfg(debug_assertions)]
     let start_cap = buffer.capacity();
+    let mut itoa_buffer = Buffer::new();
 
     buffer.push_str(r#"<image x=""#);
-    itoa::fmt(&mut buffer, x).unwrap();
+    buffer.write_str(itoa_buffer.format(x)).unwrap();
     buffer.push_str(r#"" y=""#);
-    itoa::fmt(&mut buffer, y).unwrap();
+    buffer.write_str(itoa_buffer.format(y)).unwrap();
     buffer.push_str(r#"" width=""#);
-    itoa::fmt(&mut buffer, logo.width()).unwrap();
+    buffer.write_str(itoa_buffer.format(logo.width())).unwrap();
     buffer.push_str(r#"" height=""#);
-    itoa::fmt(&mut buffer, logo_height).unwrap();
+    buffer.write_str(itoa_buffer.format(logo_height)).unwrap();
     buffer.push_str(r#"" xlink:href=""#);
     buffer.push_str(&escaped_logo);
     buffer.push_str(r#""/>"#);

@@ -1,3 +1,5 @@
+use std::fmt::Write;
+use itoa::Buffer;
 use crate::render::font::Font;
 
 use crate::render::renderers::{render_link, RenderLinkConfig};
@@ -90,8 +92,8 @@ pub fn render_text(config: RenderTextConfig) -> RenderTextReturn {
         };
     }
 
-    let text_length = preferred_width(&config.content, config.font);
-    let escaped_content = escape_xml(&config.content);
+    let text_length = preferred_width(config.content, config.font);
+    let escaped_content = escape_xml(config.content);
 
     let shadow_margin = 150 + config.vertical_margin;
     let text_margin = 140 + config.vertical_margin;
@@ -100,7 +102,7 @@ pub fn render_text(config: RenderTextConfig) -> RenderTextReturn {
     let x = 10.0
         * (config.left_margin as f32 + 0.5 * text_length as f32 + config.horizontal_padding as f32);
 
-    let TextColoring { text, shadow } = colors_for_background(&config.color);
+    let TextColoring { text, shadow } = colors_for_background(config.color);
 
     let buffer_capacity = if config.shadow {
         160 + 150 + escaped_content.len() * 2
@@ -112,29 +114,30 @@ pub fn render_text(config: RenderTextConfig) -> RenderTextReturn {
 
     #[cfg(debug_assertions)]
     let start_cap = buffer.capacity();
+    let mut itoa_buffer = Buffer::new();
 
     if config.shadow {
         buffer.push_str(r#"<text aria-hidden="true" x=""#);
-        itoa::fmt(&mut buffer, x as u32).unwrap_or(());
+        buffer.write_str(itoa_buffer.format(x as u32)).unwrap_or(());
         buffer.push_str(r#"" y=""#);
-        itoa::fmt(&mut buffer, shadow_margin).unwrap_or(());
+        buffer.write_str(itoa_buffer.format(shadow_margin as u32)).unwrap_or(());
         buffer.push_str(r#"" fill=""#);
         buffer.push_str(shadow);
         buffer.push_str(r#"" fill-opacity=".3" transform="scale(.1)" textLength=""#);
-        itoa::fmt(&mut buffer, out_text_length).unwrap_or(());
+        buffer.write_str(itoa_buffer.format(out_text_length as u32)).unwrap_or(());
         buffer.push_str(r#"">"#);
         buffer.push_str(&escaped_content);
         buffer.push_str("</text>");
     };
 
     buffer.push_str(r#"<text x=""#);
-    itoa::fmt(&mut buffer, x as u32).unwrap_or(());
+    buffer.write_str(itoa_buffer.format(x as u32)).unwrap_or(());
     buffer.push_str(r#"" y=""#);
-    itoa::fmt(&mut buffer, text_margin).unwrap_or(());
+    buffer.write_str(itoa_buffer.format(text_margin as u32)).unwrap_or(());
     buffer.push_str(r#"" transform="scale(.1)" fill=""#);
     buffer.push_str(text);
     buffer.push_str(r#"" textLength=""#);
-    itoa::fmt(&mut buffer, out_text_length).unwrap_or(());
+    buffer.write_str(itoa_buffer.format(out_text_length as u32)).unwrap_or(());
     buffer.push_str(r#"">"#);
     buffer.push_str(&escaped_content);
     buffer.push_str(r#"</text>"#);
