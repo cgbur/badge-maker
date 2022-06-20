@@ -27,7 +27,9 @@ fn get_node_output(badge: &NewBadge) -> String {
         &badge.label_color,
         style,
     ]);
-    node_badge_maker.spawn().unwrap();
+    node_badge_maker
+        .spawn()
+        .expect("If you are seeing this, then you probably don't have node on your path!");
 
     String::from_utf8(node_badge_maker.output().unwrap().stdout).unwrap()
 }
