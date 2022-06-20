@@ -1,3 +1,5 @@
+use std::fmt::Write;
+use itoa::Buffer;
 use crate::render::util::xml::escape_xml;
 
 pub struct RenderLinkConfig<'a> {
@@ -28,17 +30,17 @@ pub fn render_link(config: RenderLinkConfig) -> String {
     );
     #[cfg(debug_assertions)]
     let start_cap = buffer.capacity();
-
+    let mut itoa_buffer = Buffer::new();
     buffer.push_str(r#"<a target="_blank" xlink:href=""#);
     buffer.push_str(&escaped_link);
     buffer.push_str(r#""><rect width=""#);
-    itoa::fmt(&mut buffer, rect_width).unwrap();
+    buffer.write_str(itoa_buffer.format(rect_width)).unwrap();
     buffer.push_str(r#"" x=""#);
-    itoa::fmt(&mut buffer, rect_x).unwrap();
+    buffer.write_str(itoa_buffer.format(rect_x)).unwrap();
     buffer.push_str(r#"" height=""#);
-    itoa::fmt(&mut buffer, rect_height).unwrap();
+    buffer.write_str(itoa_buffer.format(rect_height)).unwrap();
     buffer.push_str(r#"" fill="rgba(0,0,0,0)"/>"#);
-    buffer.push_str(&config.rendered_text);
+    buffer.push_str(config.rendered_text);
     buffer.push_str(r#"</a>"#);
 
     #[cfg(debug_assertions)]

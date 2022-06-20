@@ -98,7 +98,7 @@ impl BaseConfig {
 
         let width = left_width + right_width;
 
-        let accessible_text = create_accessible_text(&badge.label(), &badge.message());
+        let accessible_text = create_accessible_text(badge.label(), badge.message());
 
         BaseConfig {
             left_width,

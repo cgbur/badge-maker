@@ -4,7 +4,7 @@ use crate::error::Error::BadStyleChoice;
 use std::fmt::{Display, Formatter};
 
 /// Used to define the style of a badge. Used in [BadgeBuilder.style()](crate::badge::BadgeBuilder)
-#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq,Hash)]
 pub enum Style {
     Flat,
     Plastic,
