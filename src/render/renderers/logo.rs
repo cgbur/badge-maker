@@ -1,11 +1,11 @@
-use std::fmt::Write;
-use itoa::Buffer;
 use crate::badge::Logo;
 use crate::render::util::xml::{escape_xml, replace_fill_attribute};
+use itoa::Buffer;
+use std::fmt::Write;
 
 const RAW_STR_LEN: usize = 47;
 const NUM_STR_LEN: usize = 14;
-const BASE_64_SVG_IMAGE: &str="data:image/svg+xml;base64,";
+const BASE_64_SVG_IMAGE: &str = "data:image/svg+xml;base64,";
 pub struct RenderLogoConfig<'logo> {
     pub logo: &'logo Option<Logo>,
     pub badge_height: usize,
@@ -32,15 +32,13 @@ pub fn render_logo(config: RenderLogoConfig) -> RenderLogoReturn {
     let y = (config.badge_height - logo_height) / 2;
     let x = config.horizontal_padding;
     let escaped_logo = match logo {
-        Logo::LogoImage { url,.. } => {
-          escape_xml(url)
-        }
-        Logo::SVGLogo { svg,color,.. } => {
+        Logo::LogoImage { url, .. } => escape_xml(url),
+        Logo::SVGLogo { svg, color, .. } => {
             if let Some(ref color) = color {
                 let value = replace_fill_attribute(svg, &format!("fill=\"{}\"", color));
-                format!("{}{}",BASE_64_SVG_IMAGE,base64::encode(value))
+                format!("{}{}", BASE_64_SVG_IMAGE, base64::encode(value))
             } else {
-                format!("{}{}",BASE_64_SVG_IMAGE,base64::encode(svg))
+                format!("{}{}", BASE_64_SVG_IMAGE, base64::encode(svg))
             }
         }
     };

@@ -109,26 +109,26 @@ pub fn render_text_new(config: RenderTextConfig) -> RenderTextReturn {
 
     if config.shadow {
         buffer.push_str(r#"<text aria-hidden="true" x=""#);
-        itoa::fmt(&mut buffer, x as u32);
+        // itoa::fmt(&mut buffer, x as u32);
         buffer.push_str(r#"" y=""#);
-        itoa::fmt(&mut buffer, shadow_margin);
+        // itoa::fmt(&mut buffer, shadow_margin);
         buffer.push_str(r#"" fill=""#);
         buffer.push_str(shadow);
         buffer.push_str(r#"" fill-opacity=".3" transform="scale(.1)" textLength=""#);
-        itoa::fmt(&mut buffer, out_text_length);
+        // itoa::fmt(&mut buffer, out_text_length);
         buffer.push_str(r#"">"#);
         buffer.push_str(&escaped_content);
         buffer.push_str("</text>");
     };
 
     buffer.push_str(r#"<text x=""#);
-    itoa::fmt(&mut buffer, x as u32);
+    // itoa::fmt(&mut buffer, x as u32);
     buffer.push_str(r#"" y=""#);
-    itoa::fmt(&mut buffer, text_margin);
+    // itoa::fmt(&mut buffer, text_margin);
     buffer.push_str(r#"" transform="scale(.1)" fill=""#);
     buffer.push_str(text);
     buffer.push_str(r#"" textLength=""#);
-    itoa::fmt(&mut buffer, out_text_length);
+    // itoa::fmt(&mut buffer, out_text_length);
     buffer.push_str(r#"">"#);
     buffer.push_str(&escaped_content);
     buffer.push_str(r#"</text>"#);

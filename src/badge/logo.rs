@@ -34,10 +34,7 @@ pub enum Logo {
 }
 
 impl Logo {
-    #[deprecated(
-    since = "0.2.2",
-    note = "Use the Enum Type `Logo::LogoImage` instead"
-    )]
+    #[deprecated(since = "0.2.2", note = "Use the Enum Type `Logo::LogoImage` instead")]
     pub fn new(url: String, width: usize, padding: isize) -> Self {
         Self::LogoImage {
             url,
@@ -45,10 +42,7 @@ impl Logo {
             padding,
         }
     }
-    #[deprecated(
-    since = "0.2.2",
-    note = "New Logo Type Makes this function obsolete. "
-    )]
+    #[deprecated(since = "0.2.2", note = "New Logo Type Makes this function obsolete. ")]
     pub fn url(&self) -> &str {
         match self {
             Self::LogoImage { url, .. } => url,

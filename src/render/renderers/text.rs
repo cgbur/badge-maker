@@ -1,6 +1,6 @@
-use std::fmt::Write;
-use itoa::Buffer;
 use crate::render::font::Font;
+use itoa::Buffer;
+use std::fmt::Write;
 
 use crate::render::renderers::{render_link, RenderLinkConfig};
 use crate::render::util::text::{colors_for_background, preferred_width, TextColoring};
@@ -120,11 +120,15 @@ pub fn render_text(config: RenderTextConfig) -> RenderTextReturn {
         buffer.push_str(r#"<text aria-hidden="true" x=""#);
         buffer.write_str(itoa_buffer.format(x as u32)).unwrap_or(());
         buffer.push_str(r#"" y=""#);
-        buffer.write_str(itoa_buffer.format(shadow_margin as u32)).unwrap_or(());
+        buffer
+            .write_str(itoa_buffer.format(shadow_margin as u32))
+            .unwrap_or(());
         buffer.push_str(r#"" fill=""#);
         buffer.push_str(shadow);
         buffer.push_str(r#"" fill-opacity=".3" transform="scale(.1)" textLength=""#);
-        buffer.write_str(itoa_buffer.format(out_text_length as u32)).unwrap_or(());
+        buffer
+            .write_str(itoa_buffer.format(out_text_length as u32))
+            .unwrap_or(());
         buffer.push_str(r#"">"#);
         buffer.push_str(&escaped_content);
         buffer.push_str("</text>");
@@ -133,11 +137,15 @@ pub fn render_text(config: RenderTextConfig) -> RenderTextReturn {
     buffer.push_str(r#"<text x=""#);
     buffer.write_str(itoa_buffer.format(x as u32)).unwrap_or(());
     buffer.push_str(r#"" y=""#);
-    buffer.write_str(itoa_buffer.format(text_margin as u32)).unwrap_or(());
+    buffer
+        .write_str(itoa_buffer.format(text_margin as u32))
+        .unwrap_or(());
     buffer.push_str(r#"" transform="scale(.1)" fill=""#);
     buffer.push_str(text);
     buffer.push_str(r#"" textLength=""#);
-    buffer.write_str(itoa_buffer.format(out_text_length as u32)).unwrap_or(());
+    buffer
+        .write_str(itoa_buffer.format(out_text_length as u32))
+        .unwrap_or(());
     buffer.push_str(r#"">"#);
     buffer.push_str(&escaped_content);
     buffer.push_str(r#"</text>"#);

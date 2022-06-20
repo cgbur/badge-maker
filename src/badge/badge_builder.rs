@@ -108,16 +108,19 @@ impl BadgeBuilder {
         self.logo = Some(logo);
         self
     }
+
     #[deprecated(since = "0.2.2", note = "Set the logo instead")]
     pub fn logo_url(&mut self, url: &str) -> &mut Self {
         self.logo_url = Some(url.trim().to_string());
         self
     }
+
     #[deprecated(since = "0.2.2", note = "Set the logo instead")]
     pub fn logo_width(&mut self, width: usize) -> &mut Self {
         self.logo_width = Some(width);
         self
     }
+
     #[deprecated(since = "0.2.2", note = "Set the logo instead")]
     pub fn logo_padding(&mut self, padding: isize) -> &mut Self {
         self.logo_padding = Some(padding);
@@ -197,7 +200,11 @@ impl BadgeBuilder {
         } else if let Some(url) = self.logo_url.as_ref() {
             let width = self.logo_width.unwrap_or(DEFAULT_LOGO_WIDTH);
             let padding = self.logo_padding.unwrap_or(DEFAULT_LOGO_PADDING);
-            Some(Logo::LogoImage { url: url.to_string(), width, padding })
+            Some(Logo::LogoImage {
+                url: url.to_string(),
+                width,
+                padding,
+            })
         } else {
             None
         };

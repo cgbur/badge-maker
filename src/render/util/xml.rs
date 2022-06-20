@@ -21,7 +21,7 @@ lazy_static! {
 /// `replace_with` - The value to replace the fill with.
 pub(crate) fn replace_fill_attribute(svg: &str, replace_with: &str) -> String {
     lazy_static! {
-        static ref FILL_PATTERN:Regex = Regex::new(r"fill=[^\s]+").unwrap();
+        static ref FILL_PATTERN: Regex = Regex::new(r"fill=[^\s]+").unwrap();
     }
     if FILL_PATTERN.is_match(svg) {
         FILL_PATTERN.replace_all(svg, replace_with).to_string()
@@ -32,10 +32,15 @@ pub(crate) fn replace_fill_attribute(svg: &str, replace_with: &str) -> String {
 
 #[test]
 pub fn test_replace_fill_attribute() {
-    assert_eq!("<svg fill=\"#ffffff\"", replace_fill_attribute("<svg fill=\"#000000\"", "fill=\"#ffffff\""));
-    assert_eq!("<svg fill=\"#ffffff\"", replace_fill_attribute("<svg", "fill=\"#ffffff\""));
+    assert_eq!(
+        "<svg fill=\"#ffffff\"",
+        replace_fill_attribute("<svg fill=\"#000000\"", "fill=\"#ffffff\"")
+    );
+    assert_eq!(
+        "<svg fill=\"#ffffff\"",
+        replace_fill_attribute("<svg", "fill=\"#ffffff\"")
+    );
 }
-
 
 fn strip_xml_trailing_aho(s: &str) -> String {
     lazy_static! {

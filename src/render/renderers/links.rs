@@ -1,6 +1,6 @@
-use std::fmt::Write;
-use itoa::Buffer;
 use crate::render::util::xml::escape_xml;
+use itoa::Buffer;
+use std::fmt::Write;
 
 pub struct RenderLinkConfig<'a> {
     pub link: &'a str,

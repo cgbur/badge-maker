@@ -1,3 +1,5 @@
+use std::fmt::Write;
+
 use aho_corasick::{AhoCorasick, AhoCorasickBuilder};
 use badge_maker::Links;
 use lazy_static::lazy_static;
@@ -75,9 +77,9 @@ pub fn render_badge_new(config: RenderBadgeConfig, main: &str) -> String {
         String::with_capacity(140 + link_len + main.len() + attributes.len() + title.len());
 
     buffer.push_str(r##"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width=""##);
-    itoa::fmt(&mut buffer, width);
+    // itoa::fmt(&mut buffer, width);
     buffer.push_str(r#"" height=""#);
-    itoa::fmt(&mut buffer, config.height);
+    // itoa::fmt(&mut buffer, config.height);
     buffer.push_str(r#"" "#);
 
     buffer.push_str(attributes);

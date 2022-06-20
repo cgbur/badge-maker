@@ -1,8 +1,8 @@
-use std::fmt::Write;
-use itoa::Buffer;
 use crate::badge::Links;
 use crate::render::renderers::{render_attributes, render_title};
 use crate::render::util::xml::strip_xml_whitespace;
+use itoa::Buffer;
+use std::fmt::Write;
 
 pub struct RenderBadgeConfig<'a> {
     pub left_width: usize,
