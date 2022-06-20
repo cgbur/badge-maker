@@ -59,8 +59,8 @@ pub fn render_badge(config: RenderBadgeConfig, main: &str) -> String {
         HEIGHT_AND_WIDTH_LEN + NO_LINK_LEN + link_len + main.len() + attributes.len() + title.len(),
     );
 
-    #[cfg(debug_assertions)]
     let mut itoa_buffer = Buffer::new();
+    #[cfg(debug_assertions)]
     let start_cap = buffer.capacity();
     buffer.push_str(r##"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width=""##);
 
