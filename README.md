@@ -5,7 +5,7 @@
 [crates-badge]: https://img.shields.io/crates/v/badge-maker.svg
 [crates-url]: https://crates.io/crates/badge-maker
 [mit-badge]: https://img.shields.io/badge/license-MIT-blue.svg
-[mit-url]: https://github.com/cgburgess/badge-maker/blob/master/LICENSE
+[mit-url]: https://github.com/cgbur/badge-maker/blob/master/LICENSE
 
 _Links are generated from cargo, view on [docs](https://docs.rs/badge-maker/0.1.1/badge_maker/) page_
 
@@ -25,14 +25,14 @@ _Links are generated from cargo, view on [docs](https://docs.rs/badge-maker/0.1.
 
  ![example_badge][example_badge]
 
- [flat]: https://raw.githubusercontent.com/cgburgess/badge-maker/master/doc_svgs/example_flat.svg
- [plastic]: https://raw.githubusercontent.com/cgburgess/badge-maker/master/doc_svgs/example_plastic.svg
- [flatsquare]: https://raw.githubusercontent.com/cgburgess/badge-maker/master/doc_svgs/example_flatsquare.svg
- [badge_maker]: https://raw.githubusercontent.com/cgburgess/badge-maker/master/doc_svgs/example_badge_maker.svg
- [example_color]: https://raw.githubusercontent.com/cgburgess/badge-maker/master/doc_svgs/example_color.svg
- [example_badge]: https://raw.githubusercontent.com/cgburgess/badge-maker/master/doc_svgs/example_badge.svg
- [example_cli]: https://raw.githubusercontent.com/cgburgess/badge-maker/master/doc_svgs/example_cli.svg
- [link_logo]: https://raw.githubusercontent.com/cgburgess/badge-maker/master/doc_svgs/example_link_logo.svg
+ [flat]: https://raw.githubusercontent.com/cgbur/badge-maker/master/doc_svgs/example_flat.svg
+ [plastic]: https://raw.githubusercontent.com/cgbur/badge-maker/master/doc_svgs/example_plastic.svg
+ [flatsquare]: https://raw.githubusercontent.com/cgbur/badge-maker/master/doc_svgs/example_flatsquare.svg
+ [badge_maker]: https://raw.githubusercontent.com/cgbur/badge-maker/master/doc_svgs/example_badge_maker.svg
+ [example_color]: https://raw.githubusercontent.com/cgbur/badge-maker/master/doc_svgs/example_color.svg
+ [example_badge]: https://raw.githubusercontent.com/cgbur/badge-maker/master/doc_svgs/example_badge.svg
+ [example_cli]: https://raw.githubusercontent.com/cgbur/badge-maker/master/doc_svgs/example_cli.svg
+ [link_logo]: https://raw.githubusercontent.com/cgbur/badge-maker/master/doc_svgs/example_link_logo.svg
 *_This library differs in that it generates unique IDs for the svg so it can be directly
   embedded in websites (such as in this doc). So a diff between the outputs will not match. We
  only claim the visual outputs match which is whats important._
@@ -71,7 +71,7 @@ _Links are generated from cargo, view on [docs](https://docs.rs/badge-maker/0.1.
 
  ## Features
  > This library is still in its infancy. Tests and documentation are being added whenever
- possible. If you are interested in contributing then check out the [repository](https://github.com/cgburgess/badge-maker).
+ possible. If you are interested in contributing then check out the [repository](https://github.com/cgbur/badge-maker).
  The API is likely to change. If you see something you think would work better than
  the way I've done it open an issue, I'd love to hear your suggestions.
 
